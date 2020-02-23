@@ -38,11 +38,11 @@
 
 
 <script>
-import CustomerCard from "~/components/CustomerCard";
+import CustomerCard from "~/components/JourneyPlan";
 export default {
   layout: "salesman",
   components: {
-    CustomerCard
+    JourneyPlan
   }
 };
 </script>

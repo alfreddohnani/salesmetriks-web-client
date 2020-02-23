@@ -27,10 +27,10 @@
           </menu-card>
         </v-col>
         <v-col cols="6" md="3">
-          <os themes junomenu-card link="/salesman/stock-options">
+          <menu-card  link="/salesman/stock-options">
             <template #icon>mdi-package-variant</template>
             <template #title>Stock Options</template>
-          </os>
+          </menu-card>
         </v-col>
         <v-col cols="6" md="3">
           <menu-card link="/salesman/reports">
