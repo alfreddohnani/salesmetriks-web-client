@@ -1,18 +1,19 @@
 <template>
   <div>
-    <v-row dense>
+    
+    <v-row >
 
       <v-col v-for="(item, i) in items" :key="i" cols="12">
         
-        <v-card :id="item.id" dark>
+        <v-card  :id="item.id" dark flat color="#B9C0C8" >
           <div class="d-flex flex-no-wrap justify-space-between">
             <div>
               
-              <v-icon >mdi-account</v-icon>
-              <v-card-subtitle class="" v-text="item.outlet"></v-card-subtitle>
+              <v-icon class="black--text "  >mdi-account</v-icon>
+              <v-card-subtitle class="black--text " v-text="item.outlet"></v-card-subtitle>
 
-              <v-card-subtitle v-text="item.name"></v-card-subtitle>
-              <v-card-subtitle v-text="item.contact"></v-card-subtitle>
+              <v-card-subtitle class="black--text " v-text="item.name"></v-card-subtitle>
+              <v-card-subtitle class="black--text "  v-text="item.contact"></v-card-subtitle>
             </div>
           </div>
         </v-card>
