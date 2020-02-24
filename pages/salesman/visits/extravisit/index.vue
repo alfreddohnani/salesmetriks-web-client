@@ -1,14 +1,15 @@
 <template>
-  <div>
+  <div><div>
+    </div>
+    
+    <CustomerCard />
+    <nuxt />
     <div>
       <v-layout>
         <v-spacer></v-spacer>
-        
-        <v-btn  color="green" > + Extra Visit </v-btn>
+        <v-btn color > + Add </v-btn>
       </v-layout>
     </div>
-    <CustomerCard />
-    <nuxt />
   </div>
 </template>
 <script>
