@@ -1,0 +1,19 @@
+query {
+  getAllOutlets {
+    _id
+    uniqueId
+    name
+    location
+    assignedSalesman {
+      firstName
+      lastName
+    }
+    owner {
+      firstName
+      lastName
+    }
+    outletContact {
+      telephone
+    }
+  }
+}
