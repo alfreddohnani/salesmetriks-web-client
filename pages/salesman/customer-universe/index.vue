@@ -30,7 +30,6 @@
       <v-btn icon>
         <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>
-
     </template>
 
     <template #extension-slot>
@@ -52,19 +51,24 @@
             md="4"
           >
             <customer-card>
-              <template #uniqueId>{{outlet.uniqueId}}</template>
-              <template #name>{{outlet.name}}</template>
-              <template #owner>{{outlet.owner.firstName + " " + outlet.owner.lastName}}</template>
+              <template #uniqueId>{{ outlet.uniqueId }}</template>
+              <template #name>{{ outlet.name }}</template>
+              <template #owner>{{
+                outlet.owner.firstName + " " + outlet.owner.lastName
+              }}</template>
               <template #location>{{ outlet.location }}</template>
-              <template #contact>{{ outlet.outletContact.telephone}}</template>
-              <template #salesman>{{outlet.assignedSalesman.firstName + " " + outlet.assignedSalesman.lastName}}</template>
+              <template #contact>{{ outlet.outletContact.telephone }}</template>
+              <template #salesman>{{
+                outlet.assignedSalesman.firstName +
+                  " " +
+                  outlet.assignedSalesman.lastName
+              }}</template>
             </customer-card>
           </v-col>
         </v-row>
       </v-container>
     </template>
   </salesman-layout>
-
 </template>
 <script>
 import CustomerCard from "~/components/CustomerCard";
