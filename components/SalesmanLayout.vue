@@ -1,9 +1,6 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer
-      v-model="drawer"
-      app
-    >
+    <v-navigation-drawer v-model="drawer" app>
       <v-list dense>
         <v-list-item link>
           <v-list-item-action>
@@ -24,31 +21,24 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar
-      app
-      color="indigo"
-      dark
-    >
+    <v-app-bar app color="indigo" dark elevate-on-scroll prominent>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>SALESMETRIKS</v-toolbar-title>
+      <slot name="pageToolbars"></slot><br />
+      <template v-slot:extension>
+        <slot name="extension-slot"></slot>
+      </template>
     </v-app-bar>
 
-    <v-content>
-      <v-container>
-        <nuxt />
-      </v-container>
-    </v-content>
-    <v-footer
-      color="indigo"
-      app
-    >
-      <span class="white--text">&copy; 2019</span>
+    <slot name="content"></slot>
+    <v-footer color="indigo" app>
+      <span class="white--text">&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
 export default {
+  name: "SalesmanLayout",
   props: {
     source: String
   },
@@ -58,14 +48,4 @@ export default {
 };
 </script>
 
-<style>
-@font-face {
-  font-family: "Montserrat";
-  src: url("https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap");
-}
-
-html,
-body {
-  font-family: "Montserrat";
-}
-</style>
+<style></style>
