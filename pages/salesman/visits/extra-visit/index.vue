@@ -1,8 +1,18 @@
 <template>
+
   <div>
-    <v-container>
-    <CustomerCard />
-    <nuxt />
+    <v-app-bar color="grey lighten-4" flat tile fixed style="margin-top:60px;">
+    <v-toolbar>
+      <v-btn to="/salesman/visits" icon>
+        <v-icon>mdi-arrow-left</v-icon>
+      </v-btn>
+    
+      <v-toolbar-title class="ml-12"> ExtraVisits</v-toolbar-title>
+    </v-toolbar>
+</v-app-bar>
+    <v-container class="mt-10">
+    <ExtraVisits/>
+    
     <div>
       <v-layout>
         <v-spacer></v-spacer>
@@ -13,33 +23,12 @@
   </div>
 </template>
 <script>
-import CustomerCard from "~/components/CustomerCard";
+import ExtraVisits from "~/components/ExtraVisits";
 export default {
   layout: "salesman",
   components: {
-    CustomerCard
+    ExtraVisits
   },
-  data: () => ({
-    items: [
-      {
-        id: "1",
-        outlet: "East Legon",
-        name: "Felix Mensah",
-        contact: "233539642047"
-      },
-      {
-        id: "2",
-        outlet: "East Legon",
-        name: "Felix Mensah",
-        contact: "233539642047"
-      },
-      {
-        id: "3",
-        outlet: "East Legon",
-        name: "Felix Mensah",
-        contact: "233539642047"
-      }
-    ]
-  })
+  
 };
 </script>
