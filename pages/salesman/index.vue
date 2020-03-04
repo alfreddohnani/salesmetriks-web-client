@@ -8,7 +8,7 @@
             <template #title>Journey Plan</template>
           </menu-card>
         </v-col>
-         <v-col cols="6" md="3">
+        <v-col cols="6" md="3">
           <menu-card link="/salesman/customer-universe">
             <template #icon>mdi-account-group</template>
             <template #title>Customer Universe</template>
@@ -27,7 +27,7 @@
           </menu-card>
         </v-col>
         <v-col cols="6" md="3">
-          <menu-card  link="/salesman/stock-options">
+          <menu-card link="/salesman/stock-options">
             <template #icon>mdi-package-variant</template>
             <template #title>Stock Options</template>
           </menu-card>
@@ -46,7 +46,7 @@
 <script>
 import MenuCard from "~/components/MenuCard";
 export default {
-  layout: "salesman",
+  layout: "salesman-home",
   components: {
     MenuCard
   }

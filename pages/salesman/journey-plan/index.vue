@@ -36,13 +36,12 @@
   </div>
 </template>
 
-
 <script>
-import CustomerCard from "~/components/JourneyPlan";
+import CustomerCard from "~/components/CustomerCard";
 export default {
-  layout: "salesman",
+  layout: "salesman-home",
   components: {
-    JourneyPlan
+    CustomerCard
   }
 };
 </script>
