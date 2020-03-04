@@ -1,6 +1,70 @@
 <template>
     <v-container>
-        <v-row></v-row>
+        <v-row class="wdth=50px">
+          <v-row class="ml-2 black--text" >
+            <v-list-item-avatar tile>
+              <v-icon color="black">mdi-account</v-icon>
+            </v-list-item-avatar>
+            <v-list-item-content>
+              <v-list-item-title
+                <v-text-field
+            value="50"
+            label="Target"
+            
+            outlined
+            disabled
+            class="mr-2 mt-4 "
+          
+          
+          ></v-text-field>
+
+              </v-list-item-title>
+              <v-list-item-title
+                class="pb-4"
+              
+              ><v-text-field
+            value="0.35%"
+            label="Actual"
+            outlined
+            disabled
+            class="mr-2 mt-4 "
+          ></v-text-field>
+          
+</v-list-item-title>
+<v-list-item-title
+                class="pb-4"
+              
+              ><v-text-field
+            value="0.35%"
+            label="Weight"
+            
+            outlined
+            disabled
+            class="mr-2 mt-4 "
+          ></v-text-field>
+          
+</v-list-item-title>
+              <v-list-item-title
+                class="pb-4"
+              
+              ></v-list-item-title>
+
+              <v-list-item-title
+                class="pb-4"
+                
+              >
+              <v-text-field
+            value="40%"
+            label="Sales Perfomance"
+            outlined=""
+            disabled
+            class="mr-2 mt-4 "
+          ></v-text-field>
+</v-list-item-title>
+            </v-list-item-content>
+          </v-row>
+
+        </v-row>
         <v-row>
             <v-col cols="12">
                 <v-row align="center">
@@ -8,7 +72,6 @@
     <v-form
       ref="form"
       v-model="valid"
-      :lazy-validation="lazy"
     >
       <v-text-field
         v-model="name"
@@ -72,6 +135,7 @@
 </template>
 <script>
   export default {
+    layout:"salesman",
     data: () => ({
       valid: true,
       name: '',
@@ -79,10 +143,7 @@
         v => !!v || 'Name is required',
         v => (v && v.length <= 10) || 'Name must be less than 10 characters',
       ],
-     
-      
-
-   
+        
   })
   }
 </script>
