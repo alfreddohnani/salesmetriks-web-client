@@ -21,7 +21,13 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app color="indigo" dark elevate-on-scroll prominent>
+    <v-app-bar
+      app
+      color="indigo"
+      dark
+      elevate-on-scroll
+      :prominent="prominentBar"
+    >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <slot name="pageToolbars"></slot><br />
       <template v-slot:extension>
@@ -40,7 +46,8 @@
 export default {
   name: "SalesmanLayout",
   props: {
-    source: String
+    source: String,
+    prominentBar: Boolean
   },
   data: () => ({
     drawer: null

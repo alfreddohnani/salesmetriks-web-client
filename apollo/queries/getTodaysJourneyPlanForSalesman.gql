@@ -1,0 +1,21 @@
+query {
+  getTodaysJourneyPlanForSalesman(salesman_id: "5e5d2456eb91d649fff197cb") {
+    _id
+    outlets {
+      order
+      outlet {
+        _id
+        uniqueId
+        name
+        location
+        owner {
+          firstName
+          lastName
+        }
+        outletContact {
+          telephone
+        }
+      }
+    }
+  }
+}

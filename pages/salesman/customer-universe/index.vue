@@ -1,5 +1,5 @@
 <template>
-  <salesman-layout>
+  <salesman-layout :prominentBar="true">
     <template #pageToolbars>
       <v-container>
         <v-row>
@@ -78,17 +78,9 @@
                   <template #owner>
                     {{ outlet.owner.firstName + " " + outlet.owner.lastName }}
                   </template>
-                  <template #location>{{ outlet.location }}</template>
                   <template #contact>{{
                     outlet.outletContact.telephone
                   }}</template>
-                  <template #salesman>
-                    {{
-                      outlet.assignedSalesman.firstName +
-                        " " +
-                        outlet.assignedSalesman.lastName
-                    }}
-                  </template>
                 </customer-card>
               </v-col>
             </v-row>
@@ -103,7 +95,7 @@
 <script>
 import CustomerCard from "~/components/CustomerCard";
 import SalesmanLayout from "~/components/SalesmanLayout";
-import outlets from "~/apollo/queries/allOutlets";
+import allOutlets from "~/apollo/queries/allOutlets";
 export default {
   name: "OutletsPage",
   layout: "plain",
@@ -114,7 +106,7 @@ export default {
   },
   apollo: {
     getAllOutlets: {
-      query: outlets,
+      query: allOutlets,
       prefetch: true
     }
   },
