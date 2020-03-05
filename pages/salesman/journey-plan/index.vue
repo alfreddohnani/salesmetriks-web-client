@@ -1,6 +1,38 @@
 <template>
   <div>
     <salesman-layout>
+      <template #pageToolbars>
+        <v-container>
+          <v-row></v-row>
+          <v-row>
+            <v-toolbar-title class="mx-auto title font-weight-black">Journey Plan</v-toolbar-title>
+          </v-row>
+        </v-container>
+
+        <v-spacer></v-spacer>
+
+        <v-menu offset-y>
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on">
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item>
+              <v-list-item-title>
+                <nuxt-link to="/salesman/create-outlet">Enable drag and drop</nuxt-link>
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </template>
+
+      <template #extension-slot>
+        <v-row>
+          <back-button />
+        </v-row>
+      </template>
+
       <template #content>
         <v-container>
           <v-row class="justify-center">
@@ -57,6 +89,7 @@
 
 <script>
 import CustomerCard from "~/components/CustomerCard";
+import BackButton from "~/components/BackButton";
 import SalesmanLayout from "~/components/SalesmanLayout";
 import draggable from "vuedraggable";
 import todaysJourneyPlanForSalesman from "~/apollo/queries/getTodaysJourneyPlanForSalesman";
@@ -65,6 +98,7 @@ export default {
   layout: "plain",
   components: {
     CustomerCard,
+    BackButton,
     SalesmanLayout,
     draggable
   },
@@ -77,16 +111,6 @@ export default {
   data() {
     return {
       enabled: true,
-      list: [
-        { name: "John asddfasdfsdfsd", id: 0 },
-        { name: "Joao", id: 1 },
-        { name: "Adortsu", id: 2 },
-        { name: "Cine", id: 3 },
-        { name: "Megan", id: 4 },
-        { name: "Etor", id: 5 },
-        { name: "Chekap", id: 6 },
-        { name: "Milan", id: 7 }
-      ],
       dragging: false
     };
   },
