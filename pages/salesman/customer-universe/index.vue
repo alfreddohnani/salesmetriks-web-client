@@ -3,7 +3,18 @@
     <template #pageToolbars>
       <v-container>
         <v-row>
-          <v-text-field></v-text-field>
+          <v-text-field  dense
+           label="Search"
+           prepend-inner-icon="mdi-magnify"
+           solo-inverted
+           clearable
+           dark
+           filled
+           flat
+           outlined
+           value=""
+           type="text"
+           class="mx-4"></v-text-field>
         </v-row>
         <v-row>
           <v-toolbar-title class="mx-auto title font-weight-black">Customer Universe</v-toolbar-title>
