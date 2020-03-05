@@ -18,11 +18,7 @@
             </v-btn>
           </template>
           <v-list>
-            <v-list-item>
-              <v-list-item-title>
-                <nuxt-link to="/salesman/create-outlet">Enable drag and drop</nuxt-link>
-              </v-list-item-title>
-            </v-list-item>
+            <v-list-item @click="toggleDnd">{{ enabled ? "Disable drag and drop" : "Enable drag and drop" }}</v-list-item>
           </v-list>
         </v-menu>
       </template>
@@ -110,7 +106,7 @@ export default {
   },
   data() {
     return {
-      enabled: true,
+      enabled: false,
       dragging: false
     };
   },
@@ -129,6 +125,9 @@ export default {
   },
 
   methods: {
+    toggleDnd(){
+      this.enabled = !this.enabled
+    },
     add: function() {
       this.list.push({});
     },

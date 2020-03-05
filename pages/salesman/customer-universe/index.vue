@@ -3,21 +3,25 @@
     <template #pageToolbars>
       <v-container>
         <v-row>
-          <v-text-field  dense
-           label="Search"
-           prepend-inner-icon="mdi-magnify"
-           solo-inverted
-           clearable
-           dark
-           filled
-           flat
-           outlined
-           value=""
-           type="text"
-           class="mx-4"></v-text-field>
+          <v-text-field
+            dense
+            label="Search"
+            prepend-inner-icon="mdi-magnify"
+            solo-inverted
+            clearable
+            dark
+            filled
+            flat
+            outlined
+            value=""
+            type="text"
+            class="mx-4"
+          ></v-text-field>
         </v-row>
         <v-row>
-          <v-toolbar-title class="mx-auto title font-weight-black">Customer Universe</v-toolbar-title>
+          <v-toolbar-title class="mx-auto title font-weight-black"
+            >Customer Universe</v-toolbar-title
+          >
         </v-row>
       </v-container>
 
@@ -46,7 +50,11 @@
       <v-tabs centered dark v-model="tab">
         <v-tab key="#total">
           Total
-          <v-badge color="secondary" dark :content="getAllOutlets ? getAllOutlets.length : 0"></v-badge>
+          <v-badge
+            color="secondary"
+            dark
+            :content="getAllOutlets ? getAllOutlets.length : 0"
+          ></v-badge>
         </v-tab>
         <v-tab key="#active">Active</v-tab>
         <v-tab key="#pending">Pending</v-tab>
@@ -58,15 +66,21 @@
         <v-tab-item key="total">
           <v-container>
             <v-row>
-              <v-col v-for="outlet in getAllOutlets" :key="outlet._id" xs="12" sm="12" md="4">
+              <v-col
+                v-for="outlet in getAllOutlets"
+                :key="outlet._id"
+                xs="12"
+                sm="12"
+                md="4"
+              >
                 <customer-card>
                   <template #uniqueId>{{ outlet.uniqueId }}</template>
                   <template #name>{{ outlet.name }}</template>
-                  <template #owner>{{ outlet.owner.firstName + " " + outlet.owner.lastName }}</template>
+                  <template #owner>{{
+                    outlet.owner.firstName + " " + outlet.owner.lastName
+                  }}</template>
                   <template #contact>
-                    {{
-                    outlet.outletContact.telephone
-                    }}
+                    {{ outlet.outletContact.telephone }}
                   </template>
                 </customer-card>
               </v-col>
