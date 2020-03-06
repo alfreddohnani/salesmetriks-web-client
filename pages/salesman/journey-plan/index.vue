@@ -2,15 +2,9 @@
   <div>
     <salesman-layout>
       <template #pageToolbars>
-        <v-container>
-          <v-row></v-row>
-          <v-row>
-            <v-toolbar-title class="mx-auto title font-weight-black">Journey Plan</v-toolbar-title>
-          </v-row>
-        </v-container>
-
+        <back-button class="mr-2" />
+        <div class="title font-weight-black">Journey Plan</div>
         <v-spacer></v-spacer>
-
         <v-menu offset-y>
           <template v-slot:activator="{ on }">
             <v-btn icon v-on="on">
@@ -18,16 +12,21 @@
             </v-btn>
           </template>
           <v-list>
-            <v-list-item @click="toggleDnd">{{ enabled ? "Disable drag and drop" : "Enable drag and drop" }}</v-list-item>
+            <v-list-item
+              @click="toggleDnd"
+            >{{ enabled ? "Disable drag and drop" : "Enable drag and drop" }}</v-list-item>
           </v-list>
         </v-menu>
+        <!-- <div class="ml-auto">
+            <v-btn light small>To original order</v-btn>
+            <v-btn class small color="success">Update</v-btn>
+        </div>-->
       </template>
 
-      <template #extension-slot>
-        <v-row>
-          <back-button />
-        </v-row>
-      </template>
+      <!-- <template #extension-slot>
+
+
+      </template>-->
 
       <template #content>
         <v-container>
@@ -91,7 +90,7 @@ import draggable from "vuedraggable";
 import todaysJourneyPlanForSalesman from "~/apollo/queries/getTodaysJourneyPlanForSalesman";
 export default {
   name: "JourneyPlanPage",
-  layout: "plain",
+  layout: "salesman-page",
   components: {
     CustomerCard,
     BackButton,
@@ -125,8 +124,8 @@ export default {
   },
 
   methods: {
-    toggleDnd(){
-      this.enabled = !this.enabled
+    toggleDnd() {
+      this.enabled = !this.enabled;
     },
     add: function() {
       this.list.push({});

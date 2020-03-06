@@ -1,12 +1,14 @@
 <template>
-  <v-content>
-    <nuxt />
-  </v-content>
+  <v-app id="inspire">
+    <v-content>
+      <nuxt />
+    </v-content>
+  </v-app>
 </template>
 
 <script>
 export default {
-  name: "PlainLayout"
+  name: "SalesmanPagesLayout"
 };
 </script>
 

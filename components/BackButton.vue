@@ -1,9 +1,8 @@
 <template>
-  <div class="pa-3" @click="goBack">
+  <v-btn small icon @click="goBack">
     <v-icon>mdi-arrow-left</v-icon>
-  </div>
+  </v-btn>
 </template>
-
 
 <script>
 export default {

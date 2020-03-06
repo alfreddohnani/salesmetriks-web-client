@@ -1,35 +1,12 @@
 <template>
-  <salesman-layout :prominentBar="true">
+  <salesman-layout :extensionSlot="true" :prominentBar="false">
     <template #pageToolbars>
-      <v-container>
-        <v-row>
-          <v-text-field
-            dense
-            label="Search"
-            prepend-inner-icon="mdi-magnify"
-            solo-inverted
-            clearable
-            dark
-            filled
-            flat
-            outlined
-            value=""
-            type="text"
-            class="mx-4"
-          ></v-text-field>
-        </v-row>
-        <v-row>
-          <v-toolbar-title class="mx-auto title font-weight-black"
-            >Customer Universe</v-toolbar-title
-          >
-        </v-row>
-      </v-container>
-
+      <back-button class="mr-2" />
+      <div class="title font-weight-black">Customer Universe</div>
       <v-spacer></v-spacer>
-
       <v-menu offset-y>
         <template v-slot:activator="{ on }">
-          <v-btn icon v-on="on">
+          <v-btn small icon v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
@@ -44,9 +21,6 @@
     </template>
 
     <template #extension-slot>
-      <v-row>
-        <back-button />
-      </v-row>
       <v-tabs centered dark v-model="tab">
         <v-tab key="#total">
           Total
@@ -100,7 +74,7 @@ import SalesmanLayout from "~/components/SalesmanLayout";
 import allOutlets from "~/apollo/queries/allOutlets";
 export default {
   name: "OutletsPage",
-  layout: "plain",
+  layout: "salesman-page",
   data() {
     return {
       tab: null
