@@ -11,11 +11,7 @@
           </v-btn>
         </template>
         <v-list>
-          <v-list-item>
-            <v-list-item-title>
-              <nuxt-link to="/salesman/create-outlet">Create Outlet</nuxt-link>
-            </v-list-item-title>
-          </v-list-item>
+          <v-list-item> </v-list-item>
         </v-list>
       </v-menu>
     </template>

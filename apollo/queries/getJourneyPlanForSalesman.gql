@@ -1,5 +1,5 @@
-query {
-  getTodaysJourneyPlanForSalesman(salesman_id: "5e5d2456eb91d649fff197cb") {
+query($salesman_id: ID!, $date: String!) {
+  getJourneyPlanForSalesman(salesman_id: $salesman_id, date: $date) {
     _id
     outlets {
       order
