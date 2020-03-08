@@ -1,10 +1,18 @@
 <template>
     <v-container>
-        <v-row class="wdth=50px">
+      <v-app-bar color="grey lighten-4" flat tile fixed style="margin-top:60px;">
+    <v-toolbar>
+      <v-btn to="/salesman" icon>
+        <v-icon>mdi-arrow-left</v-icon>
+      </v-btn>
+    
+      <v-toolbar-title class="ml-4">Customer Details</v-toolbar-title>
+    </v-toolbar>
+    </v-app-bar>
+
+        <v-row class="wdth=50px mt-6">
           <v-row class="ml-2 black--text" >
-            <v-list-item-avatar tile>
-              <v-icon color="black">mdi-account</v-icon>
-            </v-list-item-avatar>
+            
             <v-list-item-content>
               <v-list-item-title
                 <v-text-field
@@ -13,26 +21,26 @@
             
             outlined
             disabled
-            class="mr-2 mt-4 "
+            class="mr-2 mt-2 "
           
           
           ></v-text-field>
 
               </v-list-item-title>
               <v-list-item-title
-                class="pb-4"
+                class="mt-2"
               
               ><v-text-field
-            value="0.35%"
+            value="20"
             label="Actual"
             outlined
             disabled
-            class="mr-2 mt-4 "
+            class="mr-2 mt-2 "
           ></v-text-field>
           
 </v-list-item-title>
 <v-list-item-title
-                class="pb-4"
+                class=""
               
               ><v-text-field
             value="0.35%"
@@ -40,17 +48,17 @@
             
             outlined
             disabled
-            class="mr-2 mt-4 "
+            class="mr-2 mt-2 "
           ></v-text-field>
           
 </v-list-item-title>
               <v-list-item-title
-                class="pb-4"
+                class=""
               
               ></v-list-item-title>
 
               <v-list-item-title
-                class="pb-4"
+                class=""
                 
               >
               <v-text-field
@@ -58,7 +66,7 @@
             label="Sales Perfomance"
             outlined=""
             disabled
-            class="mr-2 mt-4 "
+            class="mr-2 mt-2 "
           ></v-text-field>
 </v-list-item-title>
             </v-list-item-content>
@@ -67,69 +75,204 @@
         </v-row>
         <v-row>
             <v-col cols="12">
-                <v-row align="center">
+                <v-row >
    
-    <v-form
-      ref="form"
-      v-model="valid"
-    >
-      <v-text-field
-        v-model="name"
-        
-        :rules="nameRules"
-        label="ID"
-        required
-      ></v-text-field>
+            <v-list-item-content>
+              <v-list-item-title
+                <v-text-field
+            value="DNS123"
+            label="ID"
+            
+            outlined
+            disabled
+            class="mr-2 mt-2 "
+          
+          
+          ></v-text-field>
 
-      <v-text-field
-        v-model="name"
-        
-        :rules="nameRules"
-        label="Outlet"
-        required
-      ></v-text-field>
-
-     <v-text-field
-        v-model="name"
-        
-        :rules="nameRules"
-        label="Name"
-        required
-      ></v-text-field>
-      <v-text-field
-        v-model="name"
-        
-        :rules="nameRules"
-        label="Contact"
-        required
-      ></v-text-field>
-      <v-text-field
-        v-model="name"
-        
-        :rules="nameRules"
-        label="Location"
-        required
-      ></v-text-field>
-      <v-text-field
-        v-model="name"
-        
-        :rules="nameRules"
-        label="Salesman"
-        required
-      ></v-text-field>
-    </v-form>
+              </v-list-item-title>
+              <v-list-item-title
+                class="mt-2"
+              
+              ><v-text-field
+            value="Grace Entrerises"
+            label="Outlet"
+            outlined
+            disabled
+            class="mr-2 mt-2 "
+          ></v-text-field>
+          
+</v-list-item-title>
+<v-list-item-title
+                class=""
+              
+              ><v-text-field
+            value="Elizabeth Amani"
+            label="Name"
+            
+            outlined
+            disabled
+            class="mr-2 mt-2 "
+          ></v-text-field>
+          
+</v-list-item-title>
+              
+              <v-text-field
+            value="+233545963406"
+            label="Contact"
+            outlined=""
+            disabled
+            class="mr-2 mt-2 "
+          ></v-text-field>
+</v-list-item-title>  
+</v-list-item-title>
+              
+              <v-text-field
+            value="Mallam Junction, Blue Kiosk"
+            label="Location"
+            outlined=""
+            disabled
+            class="mr-2 mt-2 "
+          ></v-text-field>
+</v-list-item-title> 
+</v-list-item-title>
+              
+              <v-text-field
+            value="Alfred Doh-Nani, GH025000586"
+            label="Contact"
+            outlined=""
+            disabled
+            class="mr-2 mt-2 "
+          ></v-text-field>
+</v-list-item-title>           
+            </v-list-item-content>
   </v-row>
             </v-col>
         </v-row>
-        <v-row>
-            <v-col cols="6" sm="6" md="3">
-            </v-col>
-            <v-col cols="6" sm="6" md="3">
-          <v-text-field
-            label="Outlined"
+        <v-row class="width=50px">
+          <v-row class="ml-2 black-35-text" >
+            
+            <v-list-item-content>
+              <v-list-item-title
+                <v-text-field
+            value="8"
+            label="No. Of Visits for Month"
+            
             outlined
+            disabled
+            class="mr-2 mt-2 "
+          
+          
           ></v-text-field>
-        </v-col>
+
+              </v-list-item-title>
+              <v-list-item-title
+                class="mt-2"
+              
+              ><v-text-field
+            value="GHc -2500"
+            label="Current Credit"
+            outlined
+            disabled
+            class="mr-2 mt-2 "
+          ></v-text-field>
+          
+</v-list-item-title>
+<v-list-item-title
+                class=""
+              
+              ><v-text-field
+            value="3"
+            label="Actual Visits"
+            
+            outlined
+            disabled
+            class="mr-2 mt-2 "
+          ></v-text-field>
+          
+</v-list-item-title>
+             <v-list-item-title
+                <v-text-field
+            value="6"
+            label="Visits Deficit "
+            
+            outlined
+            disabled
+            class="mr-2 mt-2 "
+          
+          
+          ></v-text-field>
+
+              </v-list-item-title>
+               <v-list-item-title
+                <v-text-field
+            value="8"
+            label="New Target Per Visit"
+            
+            outlined
+            disabled
+            class="mr-2 mt-2 "
+          
+          
+          ></v-text-field>
+
+              </v-list-item-title>
+              <v-list-item-title
+                <v-text-field
+            value="2"
+            label="New Visit Sales Target"
+            
+            outlined
+            disabled
+            class="mr-2 mt-2 "
+          
+          
+          ></v-text-field>
+          </v-text-field>
+
+              </v-list-item-title>
+              <v-list-item-title
+                <v-text-field
+            value="30"
+            label="Sales Deficit"
+            
+            outlined
+            disabled
+            class="mr-2 mt-2 "
+          
+          
+          ></v-text-field>
+
+              </v-list-item-title>
+               <v-list-item-title
+                <v-text-field
+            value="30%"
+            label="Brand A Perfomance"
+            
+            outlined
+            disabled
+            class="mr-2 mt-2 "
+          
+          
+          ></v-text-field>
+
+              </v-list-item-title>
+               <v-list-item-title
+                <v-text-field
+            value="20%"
+            label="Brand B Perfomance"
+            
+            outlined
+            disabled
+            class="mr-2 mt-2 "
+          
+          
+          ></v-text-field>
+
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-row>
+
         </v-row>
     </v-container>
 </template>

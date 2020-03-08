@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-btn @click.stop="dialog = true" color="blue darken-1" class="bottom"
-      >Print</v-btn
+      >Send Receipt</v-btn
     >
     <v-dialog v-model="dialog" max-width="290">
       <v-card>

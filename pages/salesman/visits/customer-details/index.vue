@@ -6,6 +6,7 @@
 <script>
 import CustomerDetails from '~/components/CustomerDetails'
 export default {
+  layout: "salesman",
     components:{
         CustomerDetails,
     }

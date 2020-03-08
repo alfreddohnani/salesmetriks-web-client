@@ -13,7 +13,7 @@
             <v-icon>mdi-arrow-left</v-icon>
           </v-btn>
           <v-spacer></v-spacer>
-          <v-toolbar-title>Price</v-toolbar-title>
+          <v-toolbar-title>Stock</v-toolbar-title>
           <v-spacer></v-spacer>
         </v-toolbar>
       </template>
@@ -22,7 +22,9 @@
         <v-icon small class="mr-2" @click="editItem(item)">
           mdi-pencil
         </v-icon>
-        
+        <v-icon small @click="deleteItem(item)">
+          mdi-delete
+        </v-icon>
       </template>
 
       <template v-slot:no-data>
@@ -30,7 +32,7 @@
       </template>
       <template> </template>
     </v-data-table>
-    <v-dialog v-model="dialog" max-width="500px" >
+    <v-dialog v-model="dialog" max-width="500px">
       <template v-slot:activator="{ on }">
         <v-btn color="primary" dark class="mb-2 mt-2" v-on="on" rounded
           >Add</v-btn
@@ -39,7 +41,7 @@
       <v-card>
         <v-card-title>
           <span class="headline">{{ formTitle }}</span>
-        </v-card-title>f
+        </v-card-title>
 
         <v-card-text>
           <v-container>
@@ -49,11 +51,16 @@
                  :brand="brands" label="Brand" solo>
                  </v-select>
               </v-col>
-              
               <v-col cols="12" sm="6" md="4">
                 <v-text-field
-                  v-model="editedItem.currentPrice"
-                  label="Current Price"
+                  v-model="editedItem.pack"
+                  label="Pack"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" sm="6" md="4">
+                <v-text-field
+                  v-model="editedItem.unit"
+                  label="Unit"
                 ></v-text-field>
               </v-col>
             </v-row>
@@ -68,14 +75,12 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    
-    <v-btn class="ml-12" to ="/salesman/visits/sales-order" rounded color="teal">Next</v-btn>
   </v-container>
 </template>
 <script>
 export default {
   data: () => ({
-    Stock: false,
+    dialog: false,
     brands: ["pepsodent", "yoghurt"],
     search: "",
     headers: [
@@ -86,8 +91,8 @@ export default {
         value: "name"
       },
       
-      { text: "priceRange Ghc", value: "priceRange", sortable: false },
-      { text: "currentPrice GHc", value: "currentPrice", sortable: false },
+      { text: "Pack", value: "pack", sortable: false },
+      { text: "Unit ", value: "unit", sortable: false },
       { text: "Actions", value: "action", sortable: false }
     ],
 
@@ -95,12 +100,13 @@ export default {
     editedIndex: -1,
     editedItem: {
       name: "",
-      currentPrice: 0,
+      pack: 0,
+      unit: 0,
     },
     defaultItem: {
       name: "",
-      priceRange: 0,
-      currentPrice: 0,
+      pack: 0,
+      unit: 0,
     }
   }),
 
@@ -125,21 +131,21 @@ export default {
       this.products = [
         {
           name: "Cocacola",
-          priceRange: 'GHc5-GHc 20',
-          currentPrice: 10,
+          pack: 5,
+          unit: 10,
           price: "24,000"
         },
         {
           name: "Colgate",
-          priceRange: 'GHc25-GHc 30',
-          currentPrice: 10,
+          pack: 5,
+          unit: 10,
           price: "24,000"
         },
 
         {
           name: "Pepsodent",
-          priceRange: 'GHc15-GHc 25',
-          currentPric5e: 10,
+          pack: 5,
+          unit: 10,
           price: "24,000"
         }
       ];
@@ -163,8 +169,7 @@ export default {
         this.editedItem = Object.assign({}, this.defaultItem);
         this.editedIndex = -1;
       }, 300);
-    },      priceRange: 0,
-
+    },
 
     save() {
       if (this.editedIndex > -1) {

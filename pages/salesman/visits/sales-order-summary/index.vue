@@ -30,70 +30,74 @@
         <template v-slot:no-data>
           <v-btn color="primary" @click="initialize">Reset</v-btn>
         </template>
-        <template> </template>
       </v-data-table>
-     <v-card height="75px" class="mt-2">
+     <v-card class="mt-2">
     <v-row
-      absolute
+      
       class="font-weight-medium "
     >
-      <v-col
-        class="text-center"
-        cols="12"
-      >
-        <v-row><v-col cols="6">Total</v-col>
-        <v-col cols="6">GHc :56687</v-col></v-row>
-      </v-col>
-     
-      <v-col cols='6' class="mt-2">
-        <v-btn>Cancel</v-btn>
+      
+       
+          <v-col cols="6">Total</v-col>
+        <v-col cols="6">GHc :56687</v-col>
+       
+   
+     <v-row class="mt-6 ml-4">
+      <v-col  cols='6' class="mt-2">
+        <v-btn to="/salesman/visits/stock">Cancel</v-btn>
         
       </v-col>
-      <v-spacer></v-spacer>
       <v-col cols="6" class="mt-2">
-       <div class="text-center">
-    <v-dialog
-      v-model="dialog"
-      width="500"
-    >
+        <v-dialog  v-model="dialog" persistent max-width="600px">
       <template v-slot:activator="{ on }">
-        <v-btn
-          color="red lighten-2"
-          dark
-          v-on="on"
-        >
-          Click Me
-        </v-btn>
+        <v-btn color="primary" dark v-on="on">CONFIRM</v-btn>
       </template>
-
       <v-card>
-        <v-card-title
-          class="headline grey lighten-2"
-          primary-title
-        >
-          Privacy Policy
-        </v-card-title>
-
-        <v-card-text>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-        </v-card-text>
-
-        <v-divider></v-divider>
-
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-            color="primary"
-            text
-            @click="dialog = false"
-          >
-            I accept
-          </v-btn>
+            <v-spacer></v-spacer><v-icon color='red' >mdi-close-circle-outline</v-icon>
+        </v-card-actions>
+        </v-card->
+        <v-card-text>
+          <v-container>
+            <v-row>
+
+        <v-col cols="12" sm="6" md="3">
+            <v-card-title>TOTAL(GHc)</v-card-title>
+          <v-text-field
+            label="Solo"
+            placeholder="Cash"
+            solo
+          ></v-text-field>
+        </v-col>
+
+        <v-col cols="12" sm="6" md="3">
+          <v-text-field
+            label="Solo"
+            placeholder="Credit"
+            solo
+          ></v-text-field>
+        </v-col>
+
+        
+
+      </v-row>
+          </v-container>
+          
+        </v-card-text>
+        <v-card-actions>
+          
+          <v-row >
+               <v-btn  color="blue darken-1" text @click="dialog = false">Cancel</v-btn>
+               <v-spacer></v-spacer>
+              <v-btn to="/salesman/visits/invoice" color="blue darken-1" class="mr-2">Next</v-btn>
+              </v-row>
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </div>
       </v-col>
+      
+     </v-row>
+      
     </v-row>
     
   </v-card>
