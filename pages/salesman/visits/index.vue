@@ -21,35 +21,53 @@
 
       <template #content>
         <v-container>
-          <customer-card
-            class="ma-3"
-            v-for="journeyPlan in getJourneyPlanForSalesman.outlets"
-            :key="journeyPlan.outlet._id"
-          >
-            <template #order>
-              <v-badge
-                class="pa-2"
-                inline
-                color="indigo lighten-2"
-                dark
-                :content="journeyPlan ? journeyPlan.order : 0"
+          <v-row class="justify-center">
+            <div>
+              <v-btn outlined color="indigo" class="text-center"
+                ><span>{{ new Date(date).toDateString() }}</span></v-btn
               >
-                <v-icon color="indigo lighten-2">mdi-map-marker</v-icon>
-              </v-badge>
-            </template>
-            <template #uniqueId>{{ journeyPlan.outlet.uniqueId }}</template>
-            <template #name>{{ journeyPlan.outlet.name }}</template>
-            <template #owner>
-              {{
-                journeyPlan.outlet.owner.firstName +
-                  " " +
-                  journeyPlan.outlet.owner.lastName
-              }}
-            </template>
-            <template #contact>
-              {{ journeyPlan.outlet.outletContact.telephone }}
-            </template>
-          </customer-card>
+            </div>
+          </v-row>
+          <v-row
+            class="d-flex justify-center"
+            v-if="getJourneyPlanForSalesman.outlets"
+          >
+            <div>
+              <customer-card
+                class="ma-3"
+                v-for="journeyPlan in getJourneyPlanForSalesman.outlets"
+                :key="journeyPlan.outlet._id"
+              >
+                <template #order>
+                  <v-badge
+                    class="pa-2"
+                    inline
+                    color="indigo lighten-2"
+                    dark
+                    :content="journeyPlan ? journeyPlan.order : 0"
+                  >
+                    <v-icon color="indigo lighten-2">mdi-map-marker</v-icon>
+                  </v-badge>
+                </template>
+                <template #uniqueId>{{ journeyPlan.outlet.uniqueId }}</template>
+                <template #name>{{ journeyPlan.outlet.name }}</template>
+                <template #owner>
+                  {{
+                    journeyPlan.outlet.owner.firstName +
+                      " " +
+                      journeyPlan.outlet.owner.lastName
+                  }}
+                </template>
+                <template #contact>
+                  {{ journeyPlan.outlet.outletContact.telephone }}
+                </template>
+              </customer-card>
+            </div>
+          </v-row>
+
+          <v-row class="d-flex justify-center grey--text" v-else
+            >No journey plan availble for today</v-row
+          >
         </v-container>
       </template>
     </salesman-layout>

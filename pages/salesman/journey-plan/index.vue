@@ -25,15 +25,15 @@
           class="d-flex justify-center py-2 mb-3 fixed indigo"
         >
           <v-btn @click="originalOrder" class="mr-3">Original order</v-btn>
-          <v-btn color="success">Update</v-btn>
+          <v-btn @click="updateJourneyPlan" color="success">Update</v-btn>
         </div>
         <v-container>
           <div><h6 v-if="loading">Loading...</h6></div>
           <v-row class="justify-center" :class="updated ? 'mt' : ''">
-            <div>
+            <v-container class="d-flex justify-center">
               <v-dialog v-model="dialog">
                 <template v-slot:activator="{ on }">
-                  <v-btn v-on="on"
+                  <v-btn class="text-center" v-on="on"
                     ><v-icon>mdi-calendar</v-icon
                     ><span>{{ new Date(date).toDateString() }}</span></v-btn
                   >
@@ -41,9 +41,11 @@
 
                 <v-date-picker v-model="date"></v-date-picker>
               </v-dialog>
-            </div>
+            </v-container>
             <draggable
-              v-if="getJourneyPlanForSalesman.outlets"
+              v-if="
+                getJourneyPlanForSalesman && getJourneyPlanForSalesman.outlets
+              "
               :disabled="!enabled"
               :list="
                 getJourneyPlanForSalesman
@@ -112,6 +114,7 @@ import BackButton from "~/components/BackButton";
 import SalesmanLayout from "~/components/SalesmanLayout";
 import draggable from "vuedraggable";
 import journeyPlanForSalesman from "~/apollo/queries/getJourneyPlanForSalesman";
+import updateJourneyPlan from "~/apollo/mutations/updateJourneyPlan";
 export default {
   name: "JourneyPlanPage",
   layout: "salesman-page",
@@ -167,6 +170,33 @@ export default {
   },
 
   methods: {
+    async updateJourneyPlan() {
+      try {
+        const result = await this.$apollo.mutate({
+          mutation: updateJourneyPlan,
+          variables: {
+            journeyPlan_id: this.getJourneyPlanForSalesman._id,
+            outlets: this.updatedList
+          }
+        });
+
+        console.log(result);
+        if (result.data.updateJourneyPlan._id === null) {
+          console.log("Could not update journey plan");
+        } else {
+          console.log("Journey plan updated successfully");
+        }
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
+    updateOrder(outlet, index) {
+      let updatedObj = {};
+      outlet.order = index + 1;
+
+      updatedObj = { ...outlet };
+      return updatedObj;
+    },
     toggleDnd() {
       this.enabled = !this.enabled;
     },
@@ -180,21 +210,53 @@ export default {
       this.dragging = false;
       console.log("original list", this.originalList);
 
-      const { outlets } = this.getJourneyPlanForSalesman;
+      let updateOutletsOrder = [];
 
-      console.log("updated list", outlets);
+      if (
+        this.getJourneyPlanForSalesman &&
+        this.getJourneyPlanForSalesman.outlets
+      ) {
+        const { outlets } = this.getJourneyPlanForSalesman;
+        updateOutletsOrder = outlets
+          .map(this.updateOrder)
+          .map(outletObj => {
+            let { order, outlet } = outletObj;
+            let OutletByOrderObj = {};
+            OutletByOrderObj.order = order;
+            OutletByOrderObj.outlet = outlet._id;
 
-      console.log(this.picker);
+            return OutletByOrderObj;
+          })
+          .sort((a, b) => a.order - b.order);
+
+        this.updatedList = [...updateOutletsOrder];
+      }
+
+      console.log("this.updatedList", this.updatedList);
     },
     originalOrder() {
-      let { outlets } = this.getJourneyPlanForSalesman;
-      outlets = outlets.sort((a, b) => a.order - b.order);
+      this.getJourneyPlanForSalesman.outlets = [
+        ...this.originalList
+          .map(this.updateOrder)
+          .sort((a, b) => a.order - b.order)
+      ];
+      this.updated = false;
+      console.log("outlets", this.originalList);
     }
   },
   mounted() {
-    const { outlets } = this.getJourneyPlanForSalesman;
-    const original = [...outlets];
-    this.originalList = [...original];
+    if (
+      this.getJourneyPlanForSalesman &&
+      this.getJourneyPlanForSalesman.outlets
+    ) {
+      let staticJPObj = {};
+      staticJPObj = { ...this.getJourneyPlanForSalesman };
+      Object.freeze(staticJPObj);
+
+      const { outlets } = staticJPObj;
+      this.originalList = [...outlets];
+      console.log("this.originalList", this.originalList);
+    }
   }
 };
 </script>
