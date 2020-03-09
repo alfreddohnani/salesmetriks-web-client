@@ -1,5 +1,13 @@
 <template>
   <div>
+    <div>
+      <v-snackbar vertical top :color="snackbarColor" v-model="snackbar">
+        {{ snackbarMessage }}
+        <v-btn dark text @click="snackbar = false">
+          Close
+        </v-btn>
+      </v-snackbar>
+    </div>
     <salesman-layout>
       <template #pageToolbars>
         <back-button class="mr-2" />
@@ -135,7 +143,10 @@ export default {
       loading: 0,
       originalList: [],
       updatedList: [],
-      dialog: false
+      dialog: false,
+      snackbar: false,
+      snackbarColor: "",
+      snackbarMessage: ""
     };
   },
   apollo: {
@@ -183,8 +194,15 @@ export default {
         console.log(result);
         if (result.data.updateJourneyPlan._id === null) {
           console.log("Could not update journey plan");
+          this.snackbar = true;
+          this.snackbarColor = "error";
+          this.snackbarMessage = "Could not update journey plan";
         } else {
           console.log("Journey plan updated successfully");
+          this.updated = false;
+          this.snackbar = true;
+          this.snackbarColor = "success";
+          this.snackbarMessage = "Journey plan updated successfully";
         }
       } catch (error) {
         throw new Error(error);
