@@ -1,7 +1,7 @@
 export default {
   clientConfigs: {
     default: {
-      httpEndpoint: "http://localhost:4000/graphql"
+      httpEndpoint: "https://salesmetriks-apollo-server.herokuapp.com/"
     }
   }
 };
