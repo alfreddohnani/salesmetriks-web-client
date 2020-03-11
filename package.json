@@ -15,10 +15,10 @@
     "@nuxtjs/apollo": "^4.0.0-rc19",
     "graphql-tag": "^2.10.3",
     "nuxt": "^2.11.0",
-    "vuedraggable": "^2.23.2"
+    "vuedraggable": "^2.23.2",
+    "@nuxtjs/vuetify": "^1.11.0"
   },
   "devDependencies": {
-    "@nuxtjs/vuetify": "^1.11.0",
     "@vue/test-utils": "^1.0.0-beta.32",
     "babel-jest": "^25.1.0",
     "jest": "^25.1.0",
