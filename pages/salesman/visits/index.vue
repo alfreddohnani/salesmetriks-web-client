@@ -30,24 +30,40 @@
           </v-row>
           <v-row
             class="d-flex justify-center"
-            v-if="getJourneyPlanForSalesman.outlets"
+            v-if="
+              getJourneyPlanForSalesman && getJourneyPlanForSalesman.outlets
+            "
           >
             <div>
               <customer-card
                 class="ma-3"
-                v-for="journeyPlan in getJourneyPlanForSalesman.outlets"
+                v-for="journeyPlan in sortOutletsAsc"
                 :key="journeyPlan.outlet._id"
               >
                 <template #order>
-                  <v-badge
-                    class="pa-2"
-                    inline
-                    color="indigo lighten-2"
-                    dark
-                    :content="journeyPlan ? journeyPlan.order : 0"
-                  >
-                    <v-icon color="indigo lighten-2">mdi-map-marker</v-icon>
-                  </v-badge>
+                  <div class="d-flex justify-space-between pa-2">
+                    <div>
+                      <v-badge
+                        class="pa-2"
+                        inline
+                        color="indigo lighten-2"
+                        dark
+                        :content="journeyPlan ? journeyPlan.order : 0"
+                      >
+                        <v-icon color="indigo lighten-2">mdi-map-marker</v-icon>
+                      </v-badge>
+                    </div>
+
+                    <div>
+                      <v-btn
+                        :href="`/salesman/visits/${journeyPlan.outlet._id}`"
+                        dark
+                        rounded
+                        color="indigo"
+                        >Check in</v-btn
+                      >
+                    </div>
+                  </div>
                 </template>
                 <template #uniqueId>{{ journeyPlan.outlet.uniqueId }}</template>
                 <template #name>{{ journeyPlan.outlet.name }}</template>
@@ -66,7 +82,7 @@
           </v-row>
 
           <v-row class="d-flex justify-center grey--text" v-else
-            >No journey plan availble for today</v-row
+            >No visits availble for today</v-row
           >
         </v-container>
       </template>
@@ -92,9 +108,19 @@ export default {
     return {
       salesman_id: "5e5d2456eb91d649fff197cb",
       date: new Date().toISOString().substr(0, 10),
-      getJourneyPlanForSalesman: {},
+      journeyPlanForSalesman: {},
       loading: 0
     };
+  },
+  computed: {
+    sortOutletsAsc() {
+      return this.getJourneyPlanForSalesman &&
+        this.getJourneyPlanForSalesman.outlets
+        ? this.getJourneyPlanForSalesman.outlets.sort(
+            (a, b) => a.order - b.order
+          )
+        : [];
+    }
   },
   apollo: {
     getJourneyPlanForSalesman() {
