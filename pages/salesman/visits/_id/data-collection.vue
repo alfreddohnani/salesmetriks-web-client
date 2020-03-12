@@ -472,7 +472,7 @@
                 <v-stepper-content step="4">
                   <div>
                     <v-row justify="center" class="pa-md-6">
-                      <v-col sm-8>
+                      <v-col v-if="salesOrder.salesOrderList.length > 0" sm-8>
                         <v-simple-table dense>
                           <template v-slot:default>
                             <thead>
@@ -520,6 +520,10 @@
                           </template>
                         </v-simple-table>
                       </v-col>
+
+                      <div v-else class="text-center">
+                        <small> No orders added</small>
+                      </div>
                     </v-row>
                   </div>
                   <v-btn color="primary" @click="e6 = 5">Continue</v-btn>
@@ -532,11 +536,34 @@
                   >Payment <small>Mode of payment</small></v-stepper-step
                 >
                 <v-stepper-content step="5">
-                  <v-card
-                    color="grey lighten-1"
-                    class="mb-12"
-                    height="200px"
-                  ></v-card>
+                  <div>
+                    <v-row justify="center">
+                      <v-col sm="3" md="3" lg="3">
+                        <div>
+                          <v-text-field
+                            ref="payment.cash"
+                            prefix="GH₵"
+                            v-model="payment.cash"
+                            type="number"
+                            label="Cash"
+                            outlined
+                            clearable
+                          ></v-text-field>
+                        </div>
+                        <div>
+                          <v-text-field
+                            ref="payment.credit"
+                            prefix="GH₵"
+                            v-model="payment.credit"
+                            type="number"
+                            label="Credit"
+                            outlined
+                            clearable
+                          ></v-text-field>
+                        </div>
+                      </v-col>
+                    </v-row>
+                  </div>
                   <v-btn color="primary" @click="e6 = 6">Continue</v-btn>
                   <v-btn @click="e6 = 4" icon outlined color="primary">
                     <v-icon>mdi-arrow-up</v-icon>
@@ -610,7 +637,10 @@ export default {
         salesOrderList: []
       },
       summary: {},
-      payment: {},
+      payment: {
+        cash: 0,
+        credit: 0
+      },
       invoice: {}
     };
   },
@@ -667,11 +697,15 @@ export default {
             subTotal
           });
 
-          this.salesOrder.totalSales = this.salesOrder.salesOrderList.reduce(
-            (accumulator, currentValue) => {
-              return accumulator.subTotal + currentValue.subTotal;
-            }
-          );
+          if (this.salesOrder.salesOrderList.length === 1) {
+            this.salesOrder.totalSales = this.salesOrder.salesOrderList[0].subTotal;
+          } else {
+            this.salesOrder.totalSales = this.salesOrder.salesOrderList.reduce(
+              (accumulator, currentValue) => {
+                return accumulator.subTotal + currentValue.subTotal;
+              }
+            );
+          }
 
           console.log(
             "---sales order list----",
