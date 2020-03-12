@@ -59,71 +59,73 @@
                           @click="sheet.priceCheck = !sheet.priceCheck"
                           ><v-icon>mdi-close</v-icon></v-btn
                         >
-                        <div class="px-5 px-md-12 mx-lg-auto">
-                          <div class="d-flex flex-column justify-center">
-                            <v-col xs="6">
-                              <v-overflow-btn
-                                @change="selectBrand"
-                                v-model="selectedBrand"
-                                text
-                                v-if="getAllBrands"
-                                :items="getAllBrands"
-                                label="Choose Brand"
-                                editable
-                                item-text="name"
-                                item-value="_id"
-                                return-object
-                                clearable
-                                hide-selected
-                                open-on-clear
-                                :loading="$apollo.loading ? true : false"
-                              ></v-overflow-btn>
-                            </v-col>
+                        <div>
+                          <v-row justify="center" class="px-6">
+                            <v-col cols="12" xs="6" sm="6" md="3" lg="3">
+                              <div>
+                                <v-overflow-btn
+                                  @change="selectBrand"
+                                  v-model="selectedBrand"
+                                  text
+                                  v-if="getAllBrands"
+                                  :items="getAllBrands"
+                                  label="Choose Brand"
+                                  editable
+                                  item-text="name"
+                                  item-value="_id"
+                                  return-object
+                                  clearable
+                                  hide-selected
+                                  open-on-clear
+                                  :loading="$apollo.loading ? true : false"
+                                ></v-overflow-btn>
+                              </div>
 
-                            <v-col xs="6">
-                              <div v-if="recPriceRange.start" class="pa-1">
-                                <v-btn color="grey" small outlined
-                                  >GH₵
-                                  {{ recPriceRange.start || "start" }}</v-btn
-                                >
-                                <v-btn color="grey" icon small outlined
-                                  ><v-icon>mdi-arrow-right</v-icon></v-btn
-                                >
-                                <v-btn color="grey" small outlined
-                                  >GH₵ {{ recPriceRange.end || "end" }}</v-btn
-                                >
+                              <div>
+                                <div v-if="recPriceRange.start" class="pa-1">
+                                  <v-btn color="grey" small outlined
+                                    >GH₵
+                                    {{ recPriceRange.start || "start" }}</v-btn
+                                  >
+                                  <v-btn color="grey" icon small outlined
+                                    ><v-icon>mdi-arrow-right</v-icon></v-btn
+                                  >
+                                  <v-btn color="grey" small outlined
+                                    >GH₵ {{ recPriceRange.end || "end" }}</v-btn
+                                  >
 
-                                <div class="pa-0 overline grey--text">
-                                  Recommended Price Range
+                                  <div class="pa-0 overline grey--text">
+                                    Recommended Price Range
+                                  </div>
                                 </div>
                               </div>
-                            </v-col>
 
-                            <v-col xs="6">
-                              <v-text-field
-                                ref="currentUnitPrice"
-                                :rules="[
-                                  () =>
-                                    !!currentUnitPrice ||
-                                    'This field is required'
-                                ]"
-                                v-model="currentUnitPrice"
-                                prefix="GH₵"
-                                type="number"
-                                label="Current Unit Price"
-                                outlined
-                                clearable
-                              ></v-text-field>
-                            </v-col>
+                              <div>
+                                <v-text-field
+                                  ref="currentUnitPrice"
+                                  :rules="[
+                                    () =>
+                                      !!currentUnitPrice ||
+                                      'This field is required'
+                                  ]"
+                                  v-model="currentUnitPrice"
+                                  prefix="GH₵"
+                                  type="number"
+                                  label="Current Unit Price"
+                                  outlined
+                                  clearable
+                                ></v-text-field>
+                              </div>
 
-                            <v-col xs="6">
-                              <v-btn
-                                @click="addToPricesCheckedList()"
-                                color="primary"
-                                >Add</v-btn
-                              >
+                              <div>
+                                <v-btn
+                                  @click="addToPricesCheckedList()"
+                                  color="primary"
+                                  >Add</v-btn
+                                >
+                              </div>
                             </v-col>
-                          </div>
+                          </v-row>
                         </div>
                       </v-sheet>
                     </v-bottom-sheet>
@@ -151,7 +153,7 @@
                             </div>
 
                             <div class="text--primary">
-                              GH₵ {{ item.price }}
+                              GH₵ {{ new Number(item.price).toLocaleString() }}
                               <v-card-subtitle class="pa-0 overline"
                                 >Price</v-card-subtitle
                               >
@@ -194,60 +196,59 @@
                           @click="sheet.stockCheck = !sheet.stockCheck"
                           ><v-icon>mdi-close</v-icon></v-btn
                         >
-                        <div class="px-5 px-md-12 mx-lg-auto">
-                          <div class="d-flex flex-column justify-center">
-                            <v-col xs="6">
-                              <v-overflow-btn
-                                dense
-                                @change="selectBrand"
-                                v-model="selectedBrand"
-                                text
-                                v-if="getAllBrands"
-                                :items="getAllBrands"
-                                label="Choose Brand"
-                                editable
-                                item-text="name"
-                                item-value="_id"
-                                return-object
-                                clearable
-                                hide-selected
-                                open-on-clear
-                                :loading="$apollo.loading ? true : false"
-                              ></v-overflow-btn>
-                            </v-col>
+                        <div>
+                          <v-row justify="center" class="px-6">
+                            <v-col cols="12" xs="6" sm="6" md="3" lg="3">
+                              <div>
+                                <v-overflow-btn
+                                  @change="selectBrand"
+                                  v-model="selectedBrand"
+                                  text
+                                  v-if="getAllBrands"
+                                  :items="getAllBrands"
+                                  label="Choose Brand"
+                                  editable
+                                  item-text="name"
+                                  item-value="_id"
+                                  return-object
+                                  clearable
+                                  hide-selected
+                                  open-on-clear
+                                  :loading="$apollo.loading ? true : false"
+                                ></v-overflow-btn>
+                              </div>
 
-                            <v-col xs="6">
-                              <v-text-field
-                                dense
-                                ref="stockCheck.pack"
-                                v-model="stockCheck.pack"
-                                type="number"
-                                label="Pack"
-                                outlined
-                                clearable
-                              ></v-text-field>
-                            </v-col>
+                              <div>
+                                <v-text-field
+                                  ref="stockCheck.pack"
+                                  v-model="stockCheck.pack"
+                                  type="number"
+                                  label="Pack"
+                                  outlined
+                                  clearable
+                                ></v-text-field>
+                              </div>
 
-                            <v-col xs="6">
-                              <v-text-field
-                                dense
-                                ref="stockCheck.unit"
-                                v-model="stockCheck.unit"
-                                type="number"
-                                label="Unit"
-                                outlined
-                                clearable
-                              ></v-text-field>
-                            </v-col>
+                              <div>
+                                <v-text-field
+                                  ref="stockCheck.unit"
+                                  v-model="stockCheck.unit"
+                                  type="number"
+                                  label="Unit"
+                                  outlined
+                                  clearable
+                                ></v-text-field>
+                              </div>
 
-                            <v-col xs="6">
-                              <v-btn
-                                @click="addToStockCheckedList()"
-                                color="primary"
-                                >Add</v-btn
-                              >
+                              <div>
+                                <v-btn
+                                  @click="addToStockCheckedList()"
+                                  color="primary"
+                                  >Add</v-btn
+                                >
+                              </div>
                             </v-col>
-                          </div>
+                          </v-row>
                         </div>
                       </v-sheet>
                     </v-bottom-sheet>
@@ -276,14 +277,14 @@
                             </div>
 
                             <div class="text--primary">
-                              {{ item.pack }}
+                              {{ new Number(item.pack).toLocaleString() }}
                               <v-card-subtitle class="pa-0 overline"
                                 >Pack</v-card-subtitle
                               >
                             </div>
 
                             <div class="text--primary">
-                              {{ item.unit }}
+                              {{ new Number(item.unit).toLocaleString() }}
                               <v-card-subtitle class="pa-0 overline"
                                 >Unit</v-card-subtitle
                               >
@@ -309,11 +310,155 @@
                 >
 
                 <v-stepper-content step="3">
-                  <v-card
-                    color="grey lighten-1"
-                    class="mb-12"
-                    height="200px"
-                  ></v-card>
+                  <div class="my-12">
+                    <v-bottom-sheet v-model="sheet.salesOrder">
+                      <template v-slot:activator="{ on }">
+                        <div class="text-center">
+                          <v-btn small color="primary" dark v-on="on">
+                            Add Item
+                          </v-btn>
+                        </div>
+                        <v-divider class="my-3"></v-divider>
+                      </template>
+                      <v-sheet class="text-center" height="450px">
+                        <v-btn
+                          class="mt-3"
+                          icon
+                          small
+                          outlined
+                          color="error"
+                          @click="sheet.salesOrder = !sheet.salesOrder"
+                          ><v-icon>mdi-close</v-icon></v-btn
+                        >
+                        <div class="">
+                          <v-row class="px-6" justify="center">
+                            <v-col cols="12" xs="6" sm="6" md="3" lg="3">
+                              <div>
+                                <v-overflow-btn
+                                  @change="selectBrand"
+                                  v-model="selectedBrand"
+                                  text
+                                  v-if="getAllBrands"
+                                  :items="getAllBrands"
+                                  label="Choose Brand"
+                                  editable
+                                  item-text="name"
+                                  item-value="_id"
+                                  return-object
+                                  clearable
+                                  hide-selected
+                                  open-on-clear
+                                  :loading="$apollo.loading ? true : false"
+                                ></v-overflow-btn>
+                              </div>
+
+                              <div>
+                                <v-text-field
+                                  ref="salesOrder.pack"
+                                  v-model="salesOrder.pack"
+                                  type="number"
+                                  label="Pack"
+                                  outlined
+                                  clearable
+                                ></v-text-field>
+                              </div>
+
+                              <div>
+                                <v-text-field
+                                  ref="salesOrder.unit"
+                                  v-model="salesOrder.unit"
+                                  type="number"
+                                  label="Unit"
+                                  outlined
+                                  clearable
+                                ></v-text-field>
+                              </div>
+
+                              <div>
+                                <v-text-field
+                                  ref="salesOrder.unitPrice"
+                                  prefix="GH₵"
+                                  v-model="salesOrder.unitPrice"
+                                  type="number"
+                                  label="Unit Price"
+                                  outlined
+                                  disabled
+                                ></v-text-field>
+                              </div>
+
+                              <div>
+                                <v-btn
+                                  @click="addToSalesOrderList()"
+                                  color="primary"
+                                  >Add</v-btn
+                                >
+                              </div>
+                            </v-col>
+                          </v-row>
+                        </div>
+                      </v-sheet>
+                    </v-bottom-sheet>
+
+                    <div>
+                      <div
+                        v-if="
+                          salesOrder.salesOrderList &&
+                            salesOrder.salesOrderList.length !== 0
+                        "
+                      >
+                        <v-card
+                          v-for="item in salesOrder.salesOrderList"
+                          :key="item.brand._id"
+                          class="mx-auto pa-0"
+                          max-width="700"
+                        >
+                          <v-card-text
+                            class="d-flex justify-space-between my-2"
+                          >
+                            <div class="text--primary">
+                              {{ item.brand.name }}
+                              <v-card-subtitle class="pa-0 overline"
+                                >Brand</v-card-subtitle
+                              >
+                            </div>
+
+                            <div class="text--primary">
+                              {{ new Number(item.pack).toLocaleString() }}
+                              <v-card-subtitle class="pa-0 overline"
+                                >Pack</v-card-subtitle
+                              >
+                            </div>
+                            <div class="text--primary">
+                              {{ new Number(item.unit).toLocaleString() }}
+                              <v-card-subtitle class="pa-0 overline"
+                                >Unit</v-card-subtitle
+                              >
+                            </div>
+
+                            <div class="text--primary">
+                              GH₵
+                              {{ new Number(item.unitPrice).toLocaleString() }}
+                              <v-card-subtitle class="pa-0 overline"
+                                >Unit Price</v-card-subtitle
+                              >
+                            </div>
+
+                            <div class="text--primary">
+                              GH₵
+                              {{ new Number(item.subTotal).toLocaleString() }}
+                              <v-card-subtitle class="pa-0 overline"
+                                >subTotal</v-card-subtitle
+                              >
+                            </div>
+                          </v-card-text>
+                        </v-card>
+                      </div>
+
+                      <div v-else class="text-center">
+                        <small> No orders added</small>
+                      </div>
+                    </div>
+                  </div>
                   <v-btn color="primary" @click="e6 = 4">Continue</v-btn>
                   <v-btn @click="e6 = 2" icon outlined color="primary">
                     <v-icon>mdi-arrow-up</v-icon>
@@ -410,7 +555,13 @@ export default {
         unit: "",
         stockCheckedList: []
       },
-      salesOrder: {},
+      salesOrder: {
+        pack: "",
+        unit: "",
+        unitPrice: "",
+        subTotal: "",
+        salesOrderList: []
+      },
       summary: {},
       payment: {},
       invoice: {}
@@ -434,6 +585,64 @@ export default {
       this.color = color;
       this.snackbar = true;
     },
+    addToSalesOrderList() {
+      if (
+        this.selectedBrand.name &&
+        this.salesOrder.pack &&
+        this.salesOrder.unit &&
+        this.salesOrder.unitPrice
+      ) {
+        if (
+          this.salesOrder.salesOrderList.filter(
+            e => e.brand.name === this.selectedBrand.name
+          ).length > 0
+        ) {
+          this.snackbarAlert(
+            `${this.selectedBrand.name} has already been added`,
+            "error"
+          );
+        } else {
+          const subTotal =
+            this.salesOrder.pack *
+            this.salesOrder.unit *
+            this.salesOrder.unitPrice;
+          this.salesOrder.salesOrderList.unshift({
+            brand: this.selectedBrand,
+            pack: this.salesOrder.pack,
+            unit: this.salesOrder.unit,
+            unitPrice: this.salesOrder.unitPrice,
+            subTotal
+          });
+
+          console.log(
+            "---sales order list----",
+            this.salesOrder.salesOrderList
+          );
+
+          this.selectedBrand = "";
+          this.salesOrder.pack = "";
+          this.salesOrder.unit = "";
+        }
+
+        this.sheet.salesOrder = !this.sheet.salesOrder;
+        console.log(
+          "-----selected brand name----",
+          this.selectedBrand.name,
+          "----pack-----",
+          this.salesOrder.pack,
+          "----unit",
+          this.salesOrder.unit
+        );
+      } else {
+        if (!this.selectedBrand.name) {
+          this.snackbarAlert("Select a brand!", "error");
+        } else if (!this.salesOrder.pack) {
+          this.snackbarAlert("Enter the number of packs!", "error");
+        } else if (!this.salesOrder.unit) {
+          this.snackbarAlert("Enter the number of units!", "error");
+        }
+      }
+    },
     addToStockCheckedList() {
       if (
         this.selectedBrand.name &&
@@ -445,7 +654,6 @@ export default {
             e => e.brand.name === this.selectedBrand.name
           ).length > 0
         ) {
-          /* this.pricesCheckedList contains the element we're looking for */
           this.snackbarAlert(
             `${this.selectedBrand.name} has already been added`,
             "error"
@@ -536,7 +744,9 @@ export default {
 
         this.recPriceRange.end =
           e.recommendedOutletSellingPriceRangePerUnit.end;
-        // console.log("-----select brand working-----", e);
+
+        this.salesOrder.unitPrice = e.salesmanSellingPricePerUnit;
+
         console.log("-----select brand working-----", this.selectedBrand);
       } else {
         this.selectedBrand = {};
