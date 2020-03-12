@@ -1,0 +1,9 @@
+query {
+  getAllBrands {
+    name
+    recommendedOutletSellingPriceRangePerUnit {
+      start
+      end
+    }
+  }
+}

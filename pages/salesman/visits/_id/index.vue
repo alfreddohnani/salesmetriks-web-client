@@ -226,6 +226,15 @@
               </div>
 
               <v-divider class=""></v-divider>
+
+              <div class="text-center my-5">
+                <v-btn
+                  :href="`/salesman/visits/${$route.params.id}/data-collection`"
+                  dark
+                  color="indigo"
+                  >Next &nbsp;<v-icon>mdi-arrow-right</v-icon></v-btn
+                >
+              </div>
             </div>
           </div>
         </v-container>

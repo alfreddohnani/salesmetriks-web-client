@@ -1,0 +1,355 @@
+<template>
+  <div>
+    <div>
+      <v-snackbar vertical top :color="snackbarColor" v-model="snackbar">
+        {{ snackbarMessage }}
+        <v-btn dark text @click="snackbar = false">
+          Close
+        </v-btn>
+      </v-snackbar>
+    </div>
+
+    <salesman-layout>
+      <template #pageToolbars>
+        <back-button class="mr-2" />
+        <div class="title font-weight-black">Visit - Data Collection</div>
+        <v-spacer></v-spacer>
+        <v-menu offset-y>
+          <template v-slot:activator="{ on }">
+            <v-btn small icon v-on="on">
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <!-- <v-list-item>
+              Extra Visit
+            </v-list-item> -->
+          </v-list>
+        </v-menu>
+      </template>
+
+      <template #content>
+        <div>
+          <v-container>
+            <div>
+              <v-stepper v-model="e6" vertical>
+                <v-stepper-step :complete="e6 > 1" step="1">
+                  Price Check
+                  <small>Enter unit selling price per brand</small>
+                </v-stepper-step>
+
+                <v-stepper-content step="1">
+                  <div class="my-12">
+                    <v-bottom-sheet v-model="sheet">
+                      <template v-slot:activator="{ on }">
+                        <div class="text-center">
+                          <v-btn small color="primary" dark v-on="on">
+                            Select Brand
+                          </v-btn>
+                        </div>
+                        <v-divider class="my-3"></v-divider>
+                      </template>
+                      <v-sheet class="text-center" height="400px">
+                        <v-btn
+                          class="mt-3"
+                          icon
+                          small
+                          outlined
+                          color="error"
+                          @click="sheet = !sheet"
+                          ><v-icon>mdi-close</v-icon></v-btn
+                        >
+                        <div class="px-5 px-md-12 mx-lg-auto">
+                          <div class="d-flex flex-column justify-center">
+                            <v-col xs="6">
+                              <v-overflow-btn
+                                @change="selectBrand"
+                                v-model="selectedBrand"
+                                text
+                                v-if="getAllBrands"
+                                :items="getAllBrands"
+                                label="Choose Brand"
+                                editable
+                                item-text="name"
+                                item-value="_id"
+                                return-object
+                                clearable
+                                hide-selected
+                                open-on-clear
+                                :loading="$apollo.loading ? true : false"
+                              ></v-overflow-btn>
+                            </v-col>
+
+                            <v-col xs="6">
+                              <div v-if="recPriceRange.start" class="pa-1">
+                                <v-btn color="grey" small outlined
+                                  >GH₵
+                                  {{ recPriceRange.start || "start" }}</v-btn
+                                >
+                                <v-btn color="grey" icon small outlined
+                                  ><v-icon>mdi-arrow-right</v-icon></v-btn
+                                >
+                                <v-btn color="grey" small outlined
+                                  >GH₵ {{ recPriceRange.end || "end" }}</v-btn
+                                >
+
+                                <div class="pa-0 overline grey--text">
+                                  Recommended Price Range
+                                </div>
+                              </div>
+                            </v-col>
+
+                            <v-col xs="6">
+                              <v-text-field
+                                ref="currentUnitPrice"
+                                :rules="[
+                                  () =>
+                                    !!currentUnitPrice ||
+                                    'This field is required'
+                                ]"
+                                v-model="currentUnitPrice"
+                                prefix="GH₵"
+                                type="number"
+                                label="Current Unit Price"
+                                outlined
+                                clearable
+                              ></v-text-field>
+                            </v-col>
+
+                            <v-col xs="6">
+                              <v-btn
+                                @click="addToPricesCheckedList()"
+                                color="primary"
+                                >Add</v-btn
+                              >
+                            </v-col>
+                          </div>
+                        </div>
+                      </v-sheet>
+                    </v-bottom-sheet>
+
+                    <div>
+                      <div
+                        v-if="
+                          pricesCheckedList && pricesCheckedList.length !== 0
+                        "
+                      >
+                        <v-card
+                          v-for="item in pricesCheckedList"
+                          :key="item.brand._id"
+                          class="mx-auto pa-0"
+                          max-width="344"
+                        >
+                          <v-card-text
+                            class="d-flex justify-space-between my-2"
+                          >
+                            <div>{{ item.brand.name }}</div>
+
+                            <div class="text--primary">
+                              GH₵ {{ item.price }}
+                            </div>
+                          </v-card-text>
+                        </v-card>
+                      </div>
+
+                      <div v-else class="text-center">
+                        <small> None added</small>
+                      </div>
+                    </div>
+                  </div>
+                  <v-btn color="primary" @click="e6 = 2">Continue</v-btn>
+                </v-stepper-content>
+
+                <v-stepper-step :complete="e6 > 2" step="2"
+                  >Stock Check
+                  <small>Enter available stock per brand</small></v-stepper-step
+                >
+
+                <v-stepper-content step="2">
+                  <v-card
+                    color="grey lighten-1"
+                    class="mb-12"
+                    height="200px"
+                  ></v-card>
+                  <v-btn color="primary" @click="e6 = 3">Continue</v-btn>
+                  <v-btn @click="e6 = 1" icon outlined color="primary">
+                    <v-icon>mdi-arrow-up</v-icon>
+                  </v-btn>
+                </v-stepper-content>
+
+                <v-stepper-step :complete="e6 > 3" step="3"
+                  >Sales order
+                  <small>Today's sales order</small></v-stepper-step
+                >
+
+                <v-stepper-content step="3">
+                  <v-card
+                    color="grey lighten-1"
+                    class="mb-12"
+                    height="200px"
+                  ></v-card>
+                  <v-btn color="primary" @click="e6 = 4">Continue</v-btn>
+                  <v-btn @click="e6 = 2" icon outlined color="primary">
+                    <v-icon>mdi-arrow-up</v-icon>
+                  </v-btn>
+                </v-stepper-content>
+
+                <v-stepper-step :complete="e6 > 4" step="4"
+                  >Summary
+                  <small>Summary of today's sales order</small></v-stepper-step
+                >
+                <v-stepper-content step="4">
+                  <v-card
+                    color="grey lighten-1"
+                    class="mb-12"
+                    height="200px"
+                  ></v-card>
+                  <v-btn color="primary" @click="e6 = 5">Continue</v-btn>
+                  <v-btn @click="e6 = 3" icon outlined color="primary">
+                    <v-icon>mdi-arrow-up</v-icon>
+                  </v-btn>
+                </v-stepper-content>
+
+                <v-stepper-step :complete="e6 > 5" step="5"
+                  >Payment <small>Mode of payment</small></v-stepper-step
+                >
+                <v-stepper-content step="5">
+                  <v-card
+                    color="grey lighten-1"
+                    class="mb-12"
+                    height="200px"
+                  ></v-card>
+                  <v-btn color="primary" @click="e6 = 6">Continue</v-btn>
+                  <v-btn @click="e6 = 4" icon outlined color="primary">
+                    <v-icon>mdi-arrow-up</v-icon>
+                  </v-btn>
+                </v-stepper-content>
+
+                <v-stepper-step step="6"
+                  >Invoice <small>Print invoice</small></v-stepper-step
+                >
+                <v-stepper-content step="6">
+                  <v-card
+                    color="grey lighten-1"
+                    class="mb-12"
+                    height="200px"
+                  ></v-card>
+                  <v-btn color="primary" @click="e6 = 1">Continue</v-btn>
+                  <v-btn @click="e6 = 5" icon outlined color="primary">
+                    <v-icon>mdi-arrow-up</v-icon>
+                  </v-btn>
+                </v-stepper-content>
+              </v-stepper>
+            </div>
+          </v-container>
+        </div>
+      </template>
+    </salesman-layout>
+  </div>
+</template>
+
+<script>
+import SalesmanLayout from "~/components/SalesmanLayout";
+import BackButton from "~/components/BackButton";
+import ALL_BRANDS from "~/apollo/queries/getAllBrands";
+
+export default {
+  name: "VisitsDataCollectionPage",
+  layout: "salesman-page",
+  components: {
+    SalesmanLayout,
+    BackButton
+  },
+  data() {
+    return {
+      snackbar: false,
+      snackbarColor: "",
+      snackbarMessage: "",
+      sheet: false,
+      e6: 1,
+      getAllBrands: [],
+      pricesCheckedList: [],
+      selectedBrand: "",
+      recPriceRange: {},
+      currentUnitPrice: null
+    };
+  },
+  computed: {
+    func(item) {
+      console.log(item.name);
+      return item;
+    }
+  },
+  apollo: {
+    getAllBrands: {
+      query: ALL_BRANDS,
+      prefetch: true
+    }
+  },
+  methods: {
+    snackbarAlert(msg, color) {
+      this.snackbarMessage = msg;
+      this.color = color;
+      this.snackbar = true;
+    },
+    addToPricesCheckedList() {
+      if (this.selectedBrand.name && this.currentUnitPrice) {
+        if (
+          this.pricesCheckedList.filter(
+            e => e.brand.name === this.selectedBrand.name
+          ).length > 0
+        ) {
+          /* this.pricesCheckedList contains the element we're looking for */
+          this.snackbarAlert(
+            `${this.selectedBrand.name} has already been added`,
+            "error"
+          );
+        } else {
+          this.pricesCheckedList.unshift({
+            brand: this.selectedBrand,
+            price: this.currentUnitPrice
+          });
+
+          this.currentUnitPrice = "";
+          this.selectedBrand = "";
+          this.recPriceRange.start = "";
+        }
+
+        this.sheet = !this.sheet;
+        console.log(
+          "-----selected brand name----",
+          this.selectedBrand.name,
+          "----currentUnitPrice-----",
+          this.currentUnitPrice,
+          "----prices checked list",
+          this.pricesCheckedList
+        );
+      } else {
+        if (!this.selectedBrand.name) {
+          this.snackbarAlert("Select a brand!", "error");
+        } else if (!this.selectedBrand.currentUnitPrice) {
+          this.snackbarAlert("Enter the current unit price!", "error");
+        }
+      }
+    },
+
+    selectBrand(e) {
+      // Perform if check to avoid e is undefined error when the
+      // overflow button is cleared
+      if (e) {
+        this.recPriceRange.start =
+          e.recommendedOutletSellingPriceRangePerUnit.start;
+
+        this.recPriceRange.end =
+          e.recommendedOutletSellingPriceRangePerUnit.end;
+        // console.log("-----select brand working-----", e);
+        console.log("-----select brand working-----", this.selectedBrand);
+      } else {
+        this.selectedBrand = {};
+        this.recPriceRange = {};
+        console.log("-----select brand working-----", this.selectedBrand);
+      }
+    }
+  }
+};
+</script>

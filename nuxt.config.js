@@ -23,12 +23,7 @@ export default {
       {
         rel: "stylesheet",
         href:
-          "https://fonts.googleapis.com/css?family=Montserrat:400,600&display=swap"
-      },
-      {
-        rel: "stylesheet",
-        href:
-          "https://fonts.googleapis.com/css?family=Lato|Open+Sans&display=swap"
+          "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400&display=swap"
       }
     ]
   },
