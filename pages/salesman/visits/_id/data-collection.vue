@@ -470,11 +470,56 @@
                   <small>Summary of today's sales order</small></v-stepper-step
                 >
                 <v-stepper-content step="4">
-                  <v-card
-                    color="grey lighten-1"
-                    class="mb-12"
-                    height="200px"
-                  ></v-card>
+                  <div>
+                    <v-row justify="center" class="pa-md-6">
+                      <v-col sm-8>
+                        <v-simple-table dense>
+                          <template v-slot:default>
+                            <thead>
+                              <tr>
+                                <th class="text-left">Brand</th>
+                                <th class="text-left">Pack</th>
+                                <th class="text-left">Unit</th>
+                                <th class="text-left">Unit Price</th>
+                                <th class="text-left">Sub Total</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr
+                                v-for="item in salesOrder.salesOrderList"
+                                :key="item.name"
+                              >
+                                <td>{{ item.brand.name }}</td>
+                                <td>
+                                  {{ new Number(item.pack).toLocaleString() }}
+                                </td>
+                                <td>
+                                  {{ new Number(item.unit).toLocaleString() }}
+                                </td>
+                                <td>
+                                  {{
+                                    new Number(item.unitPrice).toLocaleString()
+                                  }}
+                                </td>
+                                <td>
+                                  {{
+                                    new Number(item.subTotal).toLocaleString()
+                                  }}
+                                </td>
+                              </tr>
+                              <tr>
+                                <td>Total Sales</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>value</td>
+                              </tr>
+                            </tbody>
+                          </template>
+                        </v-simple-table>
+                      </v-col>
+                    </v-row>
+                  </div>
                   <v-btn color="primary" @click="e6 = 5">Continue</v-btn>
                   <v-btn @click="e6 = 3" icon outlined color="primary">
                     <v-icon>mdi-arrow-up</v-icon>
@@ -588,8 +633,7 @@ export default {
     addToSalesOrderList() {
       if (
         this.selectedBrand.name &&
-        this.salesOrder.pack &&
-        this.salesOrder.unit &&
+        (this.salesOrder.pack || this.salesOrder.unit) &&
         this.salesOrder.unitPrice
       ) {
         if (
@@ -602,10 +646,22 @@ export default {
             "error"
           );
         } else {
-          const subTotal =
-            this.salesOrder.pack *
-            this.salesOrder.unit *
-            this.salesOrder.unitPrice;
+          let subTotal = null;
+          if (Number(this.salesOrder.pack) === 0) {
+            subTotal = this.salesOrder.unit * this.salesOrder.unitPrice;
+          } else if (Number(this.salesOrder.unit) === 0) {
+            this.snackbarAlert(
+              "Enter the number of units in one pack!",
+              "error"
+            );
+            return;
+          } else {
+            subTotal =
+              this.salesOrder.pack *
+              this.salesOrder.unit *
+              this.salesOrder.unitPrice;
+          }
+
           this.salesOrder.salesOrderList.unshift({
             brand: this.selectedBrand,
             pack: this.salesOrder.pack,
@@ -636,10 +692,8 @@ export default {
       } else {
         if (!this.selectedBrand.name) {
           this.snackbarAlert("Select a brand!", "error");
-        } else if (!this.salesOrder.pack) {
-          this.snackbarAlert("Enter the number of packs!", "error");
-        } else if (!this.salesOrder.unit) {
-          this.snackbarAlert("Enter the number of units!", "error");
+        } else if (!(this.salesOrder.pack || this.salesOrder.unit)) {
+          this.snackbarAlert("Both pack and unit cannot be empty", "error");
         }
       }
     },
