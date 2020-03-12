@@ -234,7 +234,9 @@ export default {
         this.getJourneyPlanForSalesman &&
         this.getJourneyPlanForSalesman.outlets
       ) {
-        const { outlets } = this.getJourneyPlanForSalesman;
+        const { outlets } = this.getJourneyPlanForSalesman
+          ? this.getJourneyPlanForSalesman
+          : {};
         updateOutletsOrder = outlets
           .map(this.updateOrder)
           .map(outletObj => {
