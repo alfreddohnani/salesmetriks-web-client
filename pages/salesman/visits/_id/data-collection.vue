@@ -508,11 +508,13 @@
                                 </td>
                               </tr>
                               <tr>
-                                <td>Total Sales</td>
+                                <td class="font-weight-black">Total Sales</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>value</td>
+                                <td class="font-weight-black">
+                                  GH₵ {{ salesOrder.totalSales }}
+                                </td>
                               </tr>
                             </tbody>
                           </template>
@@ -612,12 +614,7 @@ export default {
       invoice: {}
     };
   },
-  computed: {
-    func(item) {
-      console.log(item.name);
-      return item;
-    }
-  },
+  computed: {},
   apollo: {
     getAllBrands: {
       query: ALL_BRANDS,
@@ -669,6 +666,12 @@ export default {
             unitPrice: this.salesOrder.unitPrice,
             subTotal
           });
+
+          this.salesOrder.totalSales = this.salesOrder.salesOrderList.reduce(
+            (accumulator, currentValue) => {
+              return accumulator.subTotal + currentValue.subTotal;
+            }
+          );
 
           console.log(
             "---sales order list----",
