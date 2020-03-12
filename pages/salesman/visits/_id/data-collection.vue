@@ -40,7 +40,7 @@
 
                 <v-stepper-content step="1">
                   <div class="my-12">
-                    <v-bottom-sheet v-model="sheet">
+                    <v-bottom-sheet v-model="sheet.priceCheck">
                       <template v-slot:activator="{ on }">
                         <div class="text-center">
                           <v-btn small color="primary" dark v-on="on">
@@ -56,7 +56,7 @@
                           small
                           outlined
                           color="error"
-                          @click="sheet = !sheet"
+                          @click="sheet.priceCheck = !sheet.priceCheck"
                           ><v-icon>mdi-close</v-icon></v-btn
                         >
                         <div class="px-5 px-md-12 mx-lg-auto">
@@ -143,10 +143,18 @@
                           <v-card-text
                             class="d-flex justify-space-between my-2"
                           >
-                            <div>{{ item.brand.name }}</div>
+                            <div class="text--primary">
+                              {{ item.brand.name }}
+                              <v-card-subtitle class="pa-0 overline"
+                                >Brand</v-card-subtitle
+                              >
+                            </div>
 
                             <div class="text--primary">
                               GH₵ {{ item.price }}
+                              <v-card-subtitle class="pa-0 overline"
+                                >Price</v-card-subtitle
+                              >
                             </div>
                           </v-card-text>
                         </v-card>
@@ -166,11 +174,129 @@
                 >
 
                 <v-stepper-content step="2">
-                  <v-card
-                    color="grey lighten-1"
-                    class="mb-12"
-                    height="200px"
-                  ></v-card>
+                  <div class="my-12">
+                    <v-bottom-sheet v-model="sheet.stockCheck">
+                      <template v-slot:activator="{ on }">
+                        <div class="text-center">
+                          <v-btn small color="primary" dark v-on="on">
+                            Add Stock
+                          </v-btn>
+                        </div>
+                        <v-divider class="my-3"></v-divider>
+                      </template>
+                      <v-sheet class="text-center" height="400px">
+                        <v-btn
+                          class="mt-3"
+                          icon
+                          small
+                          outlined
+                          color="error"
+                          @click="sheet.stockCheck = !sheet.stockCheck"
+                          ><v-icon>mdi-close</v-icon></v-btn
+                        >
+                        <div class="px-5 px-md-12 mx-lg-auto">
+                          <div class="d-flex flex-column justify-center">
+                            <v-col xs="6">
+                              <v-overflow-btn
+                                dense
+                                @change="selectBrand"
+                                v-model="selectedBrand"
+                                text
+                                v-if="getAllBrands"
+                                :items="getAllBrands"
+                                label="Choose Brand"
+                                editable
+                                item-text="name"
+                                item-value="_id"
+                                return-object
+                                clearable
+                                hide-selected
+                                open-on-clear
+                                :loading="$apollo.loading ? true : false"
+                              ></v-overflow-btn>
+                            </v-col>
+
+                            <v-col xs="6">
+                              <v-text-field
+                                dense
+                                ref="stockCheck.pack"
+                                v-model="stockCheck.pack"
+                                type="number"
+                                label="Pack"
+                                outlined
+                                clearable
+                              ></v-text-field>
+                            </v-col>
+
+                            <v-col xs="6">
+                              <v-text-field
+                                dense
+                                ref="stockCheck.unit"
+                                v-model="stockCheck.unit"
+                                type="number"
+                                label="Unit"
+                                outlined
+                                clearable
+                              ></v-text-field>
+                            </v-col>
+
+                            <v-col xs="6">
+                              <v-btn
+                                @click="addToStockCheckedList()"
+                                color="primary"
+                                >Add</v-btn
+                              >
+                            </v-col>
+                          </div>
+                        </div>
+                      </v-sheet>
+                    </v-bottom-sheet>
+
+                    <div>
+                      <div
+                        v-if="
+                          stockCheck.stockCheckedList &&
+                            stockCheck.stockCheckedList.length !== 0
+                        "
+                      >
+                        <v-card
+                          v-for="item in stockCheck.stockCheckedList"
+                          :key="item.brand._id"
+                          class="mx-auto pa-0"
+                          max-width="344"
+                        >
+                          <v-card-text
+                            class="d-flex justify-space-between my-2"
+                          >
+                            <div class="text--primary">
+                              {{ item.brand.name }}
+                              <v-card-subtitle class="pa-0 overline"
+                                >Brand</v-card-subtitle
+                              >
+                            </div>
+
+                            <div class="text--primary">
+                              {{ item.pack }}
+                              <v-card-subtitle class="pa-0 overline"
+                                >Pack</v-card-subtitle
+                              >
+                            </div>
+
+                            <div class="text--primary">
+                              {{ item.unit }}
+                              <v-card-subtitle class="pa-0 overline"
+                                >Unit</v-card-subtitle
+                              >
+                            </div>
+                          </v-card-text>
+                        </v-card>
+                      </div>
+
+                      <div v-else class="text-center">
+                        <small> None added</small>
+                      </div>
+                    </div>
+                  </div>
                   <v-btn color="primary" @click="e6 = 3">Continue</v-btn>
                   <v-btn @click="e6 = 1" icon outlined color="primary">
                     <v-icon>mdi-arrow-up</v-icon>
@@ -265,13 +391,29 @@ export default {
       snackbar: false,
       snackbarColor: "",
       snackbarMessage: "",
-      sheet: false,
+      sheet: {
+        priceCheck: false,
+        stockCheck: false,
+        salesOrder: false,
+        summary: false,
+        payment: false,
+        invoice: false
+      },
       e6: 1,
       getAllBrands: [],
-      pricesCheckedList: [],
       selectedBrand: "",
       recPriceRange: {},
-      currentUnitPrice: null
+      currentUnitPrice: null,
+      pricesCheckedList: [],
+      stockCheck: {
+        pack: "",
+        unit: "",
+        stockCheckedList: []
+      },
+      salesOrder: {},
+      summary: {},
+      payment: {},
+      invoice: {}
     };
   },
   computed: {
@@ -291,6 +433,58 @@ export default {
       this.snackbarMessage = msg;
       this.color = color;
       this.snackbar = true;
+    },
+    addToStockCheckedList() {
+      if (
+        this.selectedBrand.name &&
+        this.stockCheck.pack &&
+        this.stockCheck.unit
+      ) {
+        if (
+          this.stockCheck.stockCheckedList.filter(
+            e => e.brand.name === this.selectedBrand.name
+          ).length > 0
+        ) {
+          /* this.pricesCheckedList contains the element we're looking for */
+          this.snackbarAlert(
+            `${this.selectedBrand.name} has already been added`,
+            "error"
+          );
+        } else {
+          this.stockCheck.stockCheckedList.unshift({
+            brand: this.selectedBrand,
+            pack: this.stockCheck.pack,
+            unit: this.stockCheck.unit
+          });
+
+          console.log(
+            "---stock checked list",
+            this.stockCheck.stockCheckedList
+          );
+
+          this.selectedBrand = "";
+          this.stockCheck.pack = "";
+          this.stockCheck.unit = "";
+        }
+
+        this.sheet.stockCheck = !this.sheet.stockCheck;
+        console.log(
+          "-----selected brand name----",
+          this.selectedBrand.name,
+          "----pack-----",
+          this.stockCheck.pack,
+          "----unit",
+          this.stockCheck.unit
+        );
+      } else {
+        if (!this.selectedBrand.name) {
+          this.snackbarAlert("Select a brand!", "error");
+        } else if (!this.stockCheck.pack) {
+          this.snackbarAlert("Enter the number of packs!", "error");
+        } else if (!this.stockCheck.unit) {
+          this.snackbarAlert("Enter the number of units!", "error");
+        }
+      }
     },
     addToPricesCheckedList() {
       if (this.selectedBrand.name && this.currentUnitPrice) {
@@ -315,7 +509,7 @@ export default {
           this.recPriceRange.start = "";
         }
 
-        this.sheet = !this.sheet;
+        this.sheet.priceCheck = !this.sheet.priceCheck;
         console.log(
           "-----selected brand name----",
           this.selectedBrand.name,
