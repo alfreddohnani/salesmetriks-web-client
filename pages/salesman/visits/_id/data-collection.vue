@@ -146,14 +146,19 @@
                             class="d-flex justify-space-between my-2"
                           >
                             <div class="text--primary">
-                              {{ item.brand.name }}
+                              {{ item.brand }}
                               <v-card-subtitle class="pa-0 overline"
                                 >Brand</v-card-subtitle
                               >
                             </div>
 
                             <div class="text--primary">
-                              GH₵ {{ new Number(item.price).toLocaleString() }}
+                              GH₵
+                              {{
+                                new Number(
+                                  item.sellingPricePerUnit
+                                ).toLocaleString()
+                              }}
                               <v-card-subtitle class="pa-0 overline"
                                 >Price</v-card-subtitle
                               >
@@ -270,7 +275,7 @@
                             class="d-flex justify-space-between my-2"
                           >
                             <div class="text--primary">
-                              {{ item.brand.name }}
+                              {{ item.brand }}
                               <v-card-subtitle class="pa-0 overline"
                                 >Brand</v-card-subtitle
                               >
@@ -416,7 +421,7 @@
                             class="d-flex justify-space-between my-2"
                           >
                             <div class="text--primary">
-                              {{ item.brand.name }}
+                              {{ item.brand }}
                               <v-card-subtitle class="pa-0 overline"
                                 >Brand</v-card-subtitle
                               >
@@ -487,9 +492,9 @@
                             <tbody>
                               <tr
                                 v-for="item in salesOrder.salesOrderList"
-                                :key="item.name"
+                                :key="item.brand"
                               >
-                                <td>{{ item.brand.name }}</td>
+                                <td>{{ item.brand }}</td>
                                 <td>
                                   {{ new Number(item.pack).toLocaleString() }}
                                 </td>
@@ -538,7 +543,7 @@
                 <v-stepper-content step="5">
                   <div>
                     <v-row justify="center">
-                      <v-col sm="3" md="3" lg="3">
+                      <v-col sm="6" md="3" lg="3">
                         <div>
                           <v-text-field
                             ref="payment.cash"
@@ -579,7 +584,7 @@
                     class="mb-12"
                     height="200px"
                   ></v-card>
-                  <v-btn color="primary" @click="e6 = 1">Continue</v-btn>
+                  <v-btn color="primary" @click="addNewVisit">Continue</v-btn>
                   <v-btn @click="e6 = 5" icon outlined color="primary">
                     <v-icon>mdi-arrow-up</v-icon>
                   </v-btn>
@@ -597,6 +602,7 @@
 import SalesmanLayout from "~/components/SalesmanLayout";
 import BackButton from "~/components/BackButton";
 import ALL_BRANDS from "~/apollo/queries/getAllBrands";
+import ADD_VISIT from "~/apollo/mutations/addVisit";
 
 export default {
   name: "VisitsDataCollectionPage",
@@ -607,6 +613,11 @@ export default {
   },
   data() {
     return {
+      outlet_id: this.$route.params.id,
+      date: new Date().toDateString(),
+      timeIn: new Date().getTime().toString(),
+      timeOut: "",
+      duration: "",
       snackbar: false,
       snackbarColor: "",
       snackbarMessage: "",
@@ -652,6 +663,52 @@ export default {
     }
   },
   methods: {
+    async addNewVisit() {
+      this.timeOut = new Date().getTime().toString();
+      this.duration = (Number(this.timeOut) - Number(this.timeIn)).toString();
+      if (this.payment.cash === 0) {
+        this.payment.paymentMethod = "credit";
+      } else if (this.payment.credit === 0) {
+        this.payment.paymentMethod = "cash";
+      } else {
+        this.payment.paymentMethod = "both";
+      }
+      try {
+        const result = await this.$apollo.mutate({
+          mutation: ADD_VISIT,
+          variables: {
+            visitInput: {
+              salesman: "5e5d2456eb91d649fff197cb",
+              outlet: this.outlet_id,
+              date: this.date,
+              timeIn: this.timeIn,
+              timeOut: this.timeOut,
+              duration: this.duration,
+              dataCollected: {
+                sellingPricePerUnitOfBrands: this.pricesCheckedList,
+                stock: this.stockCheck.stockCheckedList,
+                salesOrder: this.salesOrder.salesOrderList,
+                salesOrderSummary: {
+                  total: this.salesOrder.totalSales,
+                  cash: this.payment.cash,
+                  credit: this.payment.credit,
+                  paymentMethod: this.payment.paymentMethod,
+                  invoice: "path/to/invoice"
+                }
+              }
+            }
+          }
+        });
+
+        if (result.data.addVisit._id === null) {
+          this.snackbarAlert("Could not add new visit", "error");
+        } else {
+          this.snackbarAlert("Visit completed successfully!", "success");
+        }
+      } catch (error) {
+        throw new Error(error);
+      }
+    },
     snackbarAlert(msg, color) {
       this.snackbarMessage = msg;
       this.color = color;
@@ -659,17 +716,17 @@ export default {
     },
     addToSalesOrderList() {
       if (
-        this.selectedBrand.name &&
+        this.selectedBrand &&
         (this.salesOrder.pack || this.salesOrder.unit) &&
         this.salesOrder.unitPrice
       ) {
         if (
           this.salesOrder.salesOrderList.filter(
-            e => e.brand.name === this.selectedBrand.name
+            e => e.brand.name === this.selectedBrand
           ).length > 0
         ) {
           this.snackbarAlert(
-            `${this.selectedBrand.name} has already been added`,
+            `${this.selectedBrand} has already been added`,
             "error"
           );
         } else {
@@ -690,7 +747,7 @@ export default {
           }
 
           this.salesOrder.salesOrderList.unshift({
-            brand: this.selectedBrand,
+            brand: this.selectedBrand.name,
             pack: this.salesOrder.pack,
             unit: this.salesOrder.unit,
             unitPrice: this.salesOrder.unitPrice,
@@ -720,14 +777,14 @@ export default {
         this.sheet.salesOrder = !this.sheet.salesOrder;
         console.log(
           "-----selected brand name----",
-          this.selectedBrand.name,
+          this.selectedBrand,
           "----pack-----",
           this.salesOrder.pack,
           "----unit",
           this.salesOrder.unit
         );
       } else {
-        if (!this.selectedBrand.name) {
+        if (!this.selectedBrand) {
           this.snackbarAlert("Select a brand!", "error");
         } else if (!(this.salesOrder.pack || this.salesOrder.unit)) {
           this.snackbarAlert("Both pack and unit cannot be empty", "error");
@@ -735,23 +792,19 @@ export default {
       }
     },
     addToStockCheckedList() {
-      if (
-        this.selectedBrand.name &&
-        this.stockCheck.pack &&
-        this.stockCheck.unit
-      ) {
+      if (this.selectedBrand && this.stockCheck.pack && this.stockCheck.unit) {
         if (
           this.stockCheck.stockCheckedList.filter(
-            e => e.brand.name === this.selectedBrand.name
+            e => e.brand.name === this.selectedBrand
           ).length > 0
         ) {
           this.snackbarAlert(
-            `${this.selectedBrand.name} has already been added`,
+            `${this.selectedBrand} has already been added`,
             "error"
           );
         } else {
           this.stockCheck.stockCheckedList.unshift({
-            brand: this.selectedBrand,
+            brand: this.selectedBrand.name,
             pack: this.stockCheck.pack,
             unit: this.stockCheck.unit
           });
@@ -769,14 +822,14 @@ export default {
         this.sheet.stockCheck = !this.sheet.stockCheck;
         console.log(
           "-----selected brand name----",
-          this.selectedBrand.name,
+          this.selectedBrand,
           "----pack-----",
           this.stockCheck.pack,
           "----unit",
           this.stockCheck.unit
         );
       } else {
-        if (!this.selectedBrand.name) {
+        if (!this.selectedBrand) {
           this.snackbarAlert("Select a brand!", "error");
         } else if (!this.stockCheck.pack) {
           this.snackbarAlert("Enter the number of packs!", "error");
@@ -786,21 +839,21 @@ export default {
       }
     },
     addToPricesCheckedList() {
-      if (this.selectedBrand.name && this.currentUnitPrice) {
+      if (this.selectedBrand && this.currentUnitPrice) {
         if (
           this.pricesCheckedList.filter(
-            e => e.brand.name === this.selectedBrand.name
+            e => e.brand.name === this.selectedBrand
           ).length > 0
         ) {
           /* this.pricesCheckedList contains the element we're looking for */
           this.snackbarAlert(
-            `${this.selectedBrand.name} has already been added`,
+            `${this.selectedBrand} has already been added`,
             "error"
           );
         } else {
           this.pricesCheckedList.unshift({
-            brand: this.selectedBrand,
-            price: this.currentUnitPrice
+            brand: this.selectedBrand.name,
+            sellingPricePerUnit: this.currentUnitPrice
           });
 
           this.currentUnitPrice = "";
@@ -811,14 +864,14 @@ export default {
         this.sheet.priceCheck = !this.sheet.priceCheck;
         console.log(
           "-----selected brand name----",
-          this.selectedBrand.name,
+          this.selectedBrand,
           "----currentUnitPrice-----",
           this.currentUnitPrice,
           "----prices checked list",
           this.pricesCheckedList
         );
       } else {
-        if (!this.selectedBrand.name) {
+        if (!this.selectedBrand) {
           this.snackbarAlert("Select a brand!", "error");
         } else if (!this.selectedBrand.currentUnitPrice) {
           this.snackbarAlert("Enter the current unit price!", "error");
