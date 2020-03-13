@@ -45,7 +45,7 @@
                 </div>
 
                 <div>
-                  X%
+                  0.89%
                   <div class="overline mb-1">
                     Weight
                   </div>

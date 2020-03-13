@@ -134,7 +134,7 @@ export default {
   },
   data() {
     return {
-      salesman_id: "5e5d2456eb91d649fff197cb",
+      salesman_id: "5e6b5a5131c43200175423bd",
       date: new Date().toISOString().substr(0, 10),
       enabled: false,
       dragging: false,
