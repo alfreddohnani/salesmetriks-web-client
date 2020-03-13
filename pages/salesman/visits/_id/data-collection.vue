@@ -678,7 +678,7 @@ export default {
           mutation: ADD_VISIT,
           variables: {
             visitInput: {
-              salesman: "5e5d2456eb91d649fff197cb",
+              salesman: "5e6b5a5131c43200175423bd",
               outlet: this.outlet_id,
               date: this.date,
               timeIn: this.timeIn,
