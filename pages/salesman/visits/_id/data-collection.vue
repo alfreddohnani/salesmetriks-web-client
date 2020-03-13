@@ -699,7 +699,7 @@ export default {
         });
 
         if (result.data.addVisit._id === null) {
-          this.snackbarAlert("Could not add new visit", "error");
+          this.snackbarAlert("Could not add new visit", "success");
         } else {
           this.snackbarAlert("Visit completed successfully!", "success");
         }
