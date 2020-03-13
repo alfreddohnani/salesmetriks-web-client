@@ -1,6 +1,7 @@
 query {
   getAllBrands {
     name
+    salesmanSellingPricePerUnit
     recommendedOutletSellingPriceRangePerUnit {
       start
       end
