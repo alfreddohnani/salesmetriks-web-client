@@ -381,9 +381,9 @@
 
                               <div>
                                 <v-text-field
-                                  ref="salesOrder.unitPrice"
+                                  ref="salesOrder.price"
                                   prefix="GH₵"
-                                  v-model="salesOrder.unitPrice"
+                                  v-model="salesOrder.price"
                                   type="number"
                                   label="Unit Price"
                                   outlined
@@ -442,7 +442,7 @@
 
                             <div class="text--primary">
                               GH₵
-                              {{ new Number(item.unitPrice).toLocaleString() }}
+                              {{ new Number(item.price).toLocaleString() }}
                               <v-card-subtitle class="pa-0 overline"
                                 >Unit Price</v-card-subtitle
                               >
@@ -502,9 +502,7 @@
                                   {{ new Number(item.unit).toLocaleString() }}
                                 </td>
                                 <td>
-                                  {{
-                                    new Number(item.unitPrice).toLocaleString()
-                                  }}
+                                  {{ new Number(item.price).toLocaleString() }}
                                 </td>
                                 <td>
                                   {{
@@ -643,7 +641,7 @@ export default {
       salesOrder: {
         pack: "",
         unit: "",
-        unitPrice: "",
+        price: "",
         subTotal: "",
         salesOrderList: []
       },
@@ -689,9 +687,9 @@ export default {
                 stock: this.stockCheck.stockCheckedList,
                 salesOrder: this.salesOrder.salesOrderList,
                 salesOrderSummary: {
-                  total: this.salesOrder.totalSales,
-                  cash: this.payment.cash,
-                  credit: this.payment.credit,
+                  total: Number(this.salesOrder.totalSales),
+                  cash: Number(this.payment.cash),
+                  credit: Number(this.payment.credit),
                   paymentMethod: this.payment.paymentMethod,
                   invoice: "path/to/invoice"
                 }
@@ -718,7 +716,7 @@ export default {
       if (
         this.selectedBrand &&
         (this.salesOrder.pack || this.salesOrder.unit) &&
-        this.salesOrder.unitPrice
+        this.salesOrder.price
       ) {
         if (
           this.salesOrder.salesOrderList.filter(
@@ -732,7 +730,7 @@ export default {
         } else {
           let subTotal = null;
           if (Number(this.salesOrder.pack) === 0) {
-            subTotal = this.salesOrder.unit * this.salesOrder.unitPrice;
+            subTotal = this.salesOrder.unit * this.salesOrder.price;
           } else if (Number(this.salesOrder.unit) === 0) {
             this.snackbarAlert(
               "Enter the number of units in one pack!",
@@ -743,14 +741,14 @@ export default {
             subTotal =
               this.salesOrder.pack *
               this.salesOrder.unit *
-              this.salesOrder.unitPrice;
+              this.salesOrder.price;
           }
 
           this.salesOrder.salesOrderList.unshift({
             brand: this.selectedBrand.name,
-            pack: this.salesOrder.pack,
-            unit: this.salesOrder.unit,
-            unitPrice: this.salesOrder.unitPrice,
+            pack: Number(this.salesOrder.pack),
+            unit: Number(this.salesOrder.unit),
+            price: Number(this.salesOrder.price),
             subTotal
           });
 
@@ -805,8 +803,8 @@ export default {
         } else {
           this.stockCheck.stockCheckedList.unshift({
             brand: this.selectedBrand.name,
-            pack: this.stockCheck.pack,
-            unit: this.stockCheck.unit
+            pack: Number(this.stockCheck.pack),
+            unit: Number(this.stockCheck.unit)
           });
 
           console.log(
@@ -853,7 +851,7 @@ export default {
         } else {
           this.pricesCheckedList.unshift({
             brand: this.selectedBrand.name,
-            sellingPricePerUnit: this.currentUnitPrice
+            sellingPricePerUnit: Number(this.currentUnitPrice)
           });
 
           this.currentUnitPrice = "";
@@ -889,7 +887,7 @@ export default {
         this.recPriceRange.end =
           e.recommendedOutletSellingPriceRangePerUnit.end;
 
-        this.salesOrder.unitPrice = e.salesmanSellingPricePerUnit;
+        this.salesOrder.price = e.salesmanSellingPricePerUnit;
 
         console.log("-----select brand working-----", this.selectedBrand);
       } else {
