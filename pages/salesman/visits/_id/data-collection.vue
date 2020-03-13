@@ -737,7 +737,7 @@ export default {
             this.snackbarAlert(
               "Enter the number of units in one pack!",
               "error"
-            );
+            ); //
             return;
           } else {
             subTotal =
