@@ -1,5 +1,21 @@
 mutation($visitInput: VisitInput!) {
   addVisit(visitInput: $visitInput) {
-    duration
+    outlet {
+      name
+    }
+    dataCollected {
+      salesOrder {
+        brand
+        pack
+        unit
+        price
+        subTotal
+      }
+      salesOrderSummary {
+        total
+        cash
+        credit
+      }
+    }
   }
 }
