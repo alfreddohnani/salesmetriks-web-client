@@ -1,5 +1,43 @@
 <template>
   <div>
+    <v-overlay :value="overlay">
+      <v-card style="border-radius:20px" light outline>
+        <div>
+          <v-chip
+            class="ma-2"
+            :color="uploadProgress === '100%' ? 'green' : 'teal'"
+            text-color="white"
+          >
+            <v-avatar left>
+              <v-icon>
+                {{
+                  uploadProgress === "100%"
+                    ? "mdi-checkbox-marked-circle"
+                    : "mdi-cloud-upload"
+                }}</v-icon
+              >
+            </v-avatar>
+            {{
+              uploadProgress === "100%"
+                ? "done"
+                : "uploading invoice to the cloud"
+            }}
+          </v-chip>
+        </div>
+        <div class="d-flex justify-center">
+          <v-progress-circular
+            :rotate="-90"
+            :size="100"
+            :width="15"
+            :value="uploadProgress"
+            color="teal"
+          >
+            {{ uploadProgress }}
+          </v-progress-circular>
+        </div>
+      </v-card>
+    </v-overlay>
+
     <div>
       <v-snackbar vertical top :color="snackbarColor" v-model="snackbar">
         {{ snackbarMessage }}
@@ -498,7 +536,7 @@
                     <div>
                       <v-row justify="center" class="pa-md-6">
                         <v-col v-if="salesOrder.salesOrderList.length > 0" sm-8>
-                          <v-simple-table dense>
+                          <v-simple-table>
                             <template v-slot:default>
                               <thead>
                                 <tr>
@@ -610,6 +648,7 @@
                     <v-card outlined class="ma-2">
                       <pdf :src="invoicePreviewLink"></pdf>
                     </v-card>
+
                     <v-btn color="primary">Continue</v-btn>
                     <v-btn @click="e6 = 5" icon outlined color="primary">
                       <v-icon>mdi-arrow-left</v-icon>
@@ -626,6 +665,14 @@
 </template>
 
 <script>
+import firebase from "firebase/app";
+import "firebase/storage";
+
+import firebaseConfig from "~/src/lib/utils";
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+
 import SalesmanLayout from "~/components/SalesmanLayout";
 import BackButton from "~/components/BackButton";
 import ALL_BRANDS from "~/apollo/queries/getAllBrands";
@@ -646,6 +693,8 @@ export default {
   },
   data() {
     return {
+      uploadProgress: 0,
+      overlay: false,
       invoicePreviewLink: "",
       pdfInvoice: "",
       outlet_id: this.$route.params.id,
@@ -746,6 +795,7 @@ export default {
           this.snackbarAlert("Could not add new visit", "error");
         } else {
           this.e6 = 6;
+          this.overlay = true;
           const {
             salesOrder,
             salesOrderSummary
@@ -945,7 +995,71 @@ export default {
             this.invoicePreviewLink = dataUrl;
           });
 
-          // console.log("---result---", result);
+          const storage = firebase.storage();
+          const storageRef = storage.ref();
+          const metadata = {
+            contentType: "application/pdf"
+          };
+
+          let that = this;
+
+          try {
+            pdfDocGenerator.getBlob(blob => {
+              const invoiceFileName = Date.now().toString() + ".pdf";
+              const newFile = new File([blob], invoiceFileName);
+
+              const uploadTask = storageRef
+                .child(`invoices/${this.outlet_id}/${invoiceFileName}`)
+                .put(newFile, metadata);
+
+              uploadTask.on(
+                firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+                snapshot => {
+                  this.uploadProgress = true;
+                  const progress =
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                  this.uploadProgress = progress;
+                  console.log("Upload is " + progress + "% done");
+                  switch (snapshot.state) {
+                    case firebase.storage.TaskState.PAUSED: // or 'paused'
+                      console.log("Upload is paused");
+                      break;
+                    case firebase.storage.TaskState.RUNNING: // or 'running'
+                      console.log("Upload is running");
+                      break;
+                  }
+                },
+                error => {
+                  // A full list of error codes is available at
+                  // https://firebase.google.com/docs/storage/web/handle-errors
+                  switch (error.code) {
+                    case "storage/unauthorized":
+                      // User doesn't have permission to access the object
+                      break;
+
+                    case "storage/canceled":
+                      // User canceled the upload
+                      break;
+
+                    case "storage/unknown":
+                      // Unknown error occurred, inspect error.serverResponse
+                      break;
+                  }
+                },
+                () => {
+                  // Upload completed successfully, now we can get the download URL
+                  uploadTask.snapshot.ref
+                    .getDownloadURL()
+                    .then(function(downloadURL) {
+                      that.overlay = false;
+                      console.log("File available at", downloadURL);
+                    });
+                }
+              );
+            });
+          } catch (error) {
+            throw new Error(error);
+          }
 
           // this.snackbarAlert("Visit completed successfully!", "success");
         }
@@ -1151,4 +1265,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.v-progress-circular {
+  margin: 1rem;
+}
+</style>
