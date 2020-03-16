@@ -17,7 +17,7 @@ export default {
 
 <style lang="css">
 .pdf {
-  border: 1px solid red;
+  border: 1px solid #ccc;
   width: 100%;
   height: 100%;
 }

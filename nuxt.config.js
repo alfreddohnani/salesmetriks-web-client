@@ -3,9 +3,6 @@ import apolloConfig from "./apollo/config";
 
 export default {
   mode: "universal",
-  /*
-   ** Headers of the page
-   */
   head: {
     titleTemplate: "%s - " + process.env.npm_package_name,
     title: process.env.npm_package_name || "",
@@ -27,31 +24,21 @@ export default {
       }
     ]
   },
-  /*
-   ** Customize the progress-bar color
-   */
+
   loading: { color: "#fff" },
-  /*
-   ** Global CSS
-   */
+
   css: [],
-  /*
-   ** Plugins to load before mounting the App
-   */
-  plugins: [{ src: "~/plugins/vue-pdf.js", ssr: false }],
-  /*
-   ** Nuxt.js dev-modules
-   */
+
+  plugins: [
+    { src: "~/plugins/vue-pdf.js", ssr: false },
+    "~/plugins/loading-brain"
+  ],
+
   buildModules: ["@nuxtjs/vuetify"],
-  /*
-   ** Nuxt.js modules
-   */
+
   modules: ["@nuxtjs/apollo"],
   apollo: apolloConfig,
-  /*
-   ** vuetify module configuration
-   ** https://github.com/nuxt-community/vuetify-module
-   */
+
   vuetify: {
     customVariables: ["~/assets/variables.scss"],
     treeShake: true,
@@ -70,13 +57,8 @@ export default {
       }
     }
   },
-  /*
-   ** Build configuration
-   */
+
   build: {
-    /*
-     ** You can extend webpack config here
-     */
     extend(config, ctx) {
       config.output.globalObject = "this";
       config.module.rules.push({
@@ -84,5 +66,6 @@ export default {
         loader: "url-loader"
       });
     }
-  }
+  },
+  loading: "~/components/loading.vue"
 };

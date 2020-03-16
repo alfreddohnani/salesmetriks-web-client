@@ -1,0 +1,22 @@
+mutation($invoiceInput: InvoiceInput!) {
+  addInvoice(invoiceInput: $invoiceInput) {
+    date
+    outlet {
+      name
+    }
+
+    invoiceNumber
+    salesOrder {
+      brand
+      pack
+      unit
+      price
+      subTotal
+    }
+    salesOrderSummary {
+      total
+      cash
+      credit
+    }
+  }
+}

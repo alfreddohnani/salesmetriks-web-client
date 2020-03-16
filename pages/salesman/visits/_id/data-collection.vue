@@ -646,8 +646,6 @@
                     </div>
 
                     <v-card outlined class="ma-2">
-                      <pdf :src="invoicePreviewLink"></pdf>
-
                       <div>
                         <vue-pdf :previewLink="invoicePreviewLink" />
                       </div>
@@ -679,8 +677,13 @@ if (!firebase.apps.length) {
 
 import SalesmanLayout from "~/components/SalesmanLayout";
 import BackButton from "~/components/BackButton";
+
+import INVOICE_NUMBER from "~/apollo/queries/getInvoiceNumber";
 import ALL_BRANDS from "~/apollo/queries/getAllBrands";
+
+import ADD_INVOICE from "~/apollo/mutations/addInvoice";
 import ADD_VISIT from "~/apollo/mutations/addVisit";
+
 import VuePdf from "~/components/VuePdf";
 
 import pdfMake from "pdfmake/build/pdfmake";
@@ -697,6 +700,7 @@ export default {
   },
   data() {
     return {
+      getInvoiceNumber: "",
       uploadProgress: 0,
       overlay: false,
       invoicePreviewLink: "",
@@ -1046,6 +1050,10 @@ export default {
 
                     case "storage/unknown":
                       // Unknown error occurred, inspect error.serverResponse
+                      snackbarAlert(
+                        "Could not upload invoice to the cloud. Try again",
+                        "error"
+                      );
                       break;
                   }
                 },
@@ -1055,6 +1063,36 @@ export default {
                     .getDownloadURL()
                     .then(function(downloadURL) {
                       that.overlay = false;
+                      const invoiceNumber = that.$apollo.query({
+                        query: INVOICE_NUMBER,
+                        variables: {
+                          outlet_id: that.outlet_id
+                        }
+                      });
+
+                      invoiceNumber.then(({ data }) => {
+                        if (data.getInvoiceNumber !== null) {
+                          that.$apollo.mutate({
+                            mutation: ADD_INVOICE,
+                            variables: {
+                              invoiceInput: {
+                                date: that.date,
+                                outlet: that.outlet_id,
+                                salesman: that.salesman_id,
+                                invoiceNumber: data.getInvoiceNumber + 1,
+                                salesOrder: that.salesOrder.salesOrderList,
+                                salesOrderSummary: {
+                                  total: String(that.salesOrder.totalSales),
+                                  cash: String(that.payment.cash),
+                                  credit: String(that.payment.credit),
+                                  paymentMethod: that.payment.paymentMethod
+                                }
+                              }
+                            }
+                          });
+                        }
+                      });
+
                       console.log("File available at", downloadURL);
                     });
                 }
@@ -1264,7 +1302,14 @@ export default {
         console.log("-----select brand working-----", this.selectedBrand);
       }
     }
-  }
+  },
+  // mounted() {
+  //   this.$nextTick(() => {
+  //     this.$nuxt.$loading.start();
+
+  //     setTimeout(() => this.$nuxt.$loading.finish(), 500);
+  //   });
+  // }
 };
 </script>
 
