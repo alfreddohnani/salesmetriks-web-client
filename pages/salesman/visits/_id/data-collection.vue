@@ -647,6 +647,10 @@
 
                     <v-card outlined class="ma-2">
                       <pdf :src="invoicePreviewLink"></pdf>
+
+                      <div>
+                        <vue-pdf :previewLink="invoicePreviewLink" />
+                      </div>
                     </v-card>
 
                     <v-btn color="primary">Continue</v-btn>
@@ -677,7 +681,7 @@ import SalesmanLayout from "~/components/SalesmanLayout";
 import BackButton from "~/components/BackButton";
 import ALL_BRANDS from "~/apollo/queries/getAllBrands";
 import ADD_VISIT from "~/apollo/mutations/addVisit";
-import pdf from "vue-pdf";
+import VuePdf from "~/components/VuePdf";
 
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";
@@ -689,7 +693,7 @@ export default {
   components: {
     SalesmanLayout,
     BackButton,
-    pdf
+    VuePdf
   },
   data() {
     return {
@@ -783,8 +787,7 @@ export default {
                   total: Number(this.salesOrder.totalSales),
                   cash: Number(this.payment.cash),
                   credit: Number(this.payment.credit),
-                  paymentMethod: this.payment.paymentMethod,
-                  invoice: "path/to/invoice"
+                  paymentMethod: this.payment.paymentMethod
                 }
               }
             }
