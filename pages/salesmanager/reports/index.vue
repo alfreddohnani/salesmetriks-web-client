@@ -15,7 +15,7 @@
       </v-toolbar>
       <v-select
       v-model="select"
-      :salesmen="salesmen"
+      :items="salesmen"
       label="Salesmen">
           
       </v-select>
