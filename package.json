@@ -14,9 +14,11 @@
   "dependencies": {
     "@nuxtjs/apollo": "^4.0.0-rc19",
     "@nuxtjs/vuetify": "^1.11.0",
+    "firebase": "^7.11.0",
     "graphql-tag": "^2.10.3",
-    "jspdf": "^1.5.3",
     "nuxt": "^2.11.0",
+    "pdfmake": "^0.1.65",
+    "vue-pdf": "^4.0.8",
     "vuedraggable": "^2.23.2"
   },
   "devDependencies": {

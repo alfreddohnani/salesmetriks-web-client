@@ -1,3 +1,3 @@
-const utils = {};
+import firebaseConfig from "./firebaseConfig";
 
-module.exports = utils;
+export default firebaseConfig;

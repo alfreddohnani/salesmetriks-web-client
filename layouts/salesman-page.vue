@@ -8,7 +8,12 @@
 
 <script>
 export default {
-  name: "SalesmanPagesLayout"
+  name: "SalesmanPagesLayout",
+  data() {
+    return {
+      loading: true
+    };
+  }
 };
 </script>
 
