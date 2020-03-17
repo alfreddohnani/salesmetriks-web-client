@@ -227,9 +227,11 @@
                               <div class="text--primary">
                                 GH₵
                                 {{
-                                  new Number(
-                                    item.sellingPricePerUnit
-                                  ).toLocaleString()
+                                  Number(item.sellingPricePerUnit)
+                                    ? new Number(
+                                        item.sellingPricePerUnit
+                                      ).toLocaleString()
+                                    : item.sellingPricePerUnit
                                 }}
                                 <v-card-subtitle class="pa-0 overline"
                                   >Price</v-card-subtitle
@@ -349,14 +351,22 @@
                               </div>
 
                               <div class="text--primary">
-                                {{ new Number(item.pack).toLocaleString() }}
+                                {{
+                                  Number(item.pack)
+                                    ? new Number(item.pack).toLocaleString()
+                                    : item.pack
+                                }}
                                 <v-card-subtitle class="pa-0 overline"
                                   >Pack</v-card-subtitle
                                 >
                               </div>
 
                               <div class="text--primary">
-                                {{ new Number(item.unit).toLocaleString() }}
+                                {{
+                                  Number(item.unit)
+                                    ? new Number(item.unit).toLocaleString()
+                                    : item.unit
+                                }}
                                 <v-card-subtitle class="pa-0 overline"
                                   >Unit</v-card-subtitle
                                 >
@@ -490,13 +500,21 @@
                               </div>
 
                               <div class="text--primary">
-                                {{ new Number(item.pack).toLocaleString() }}
+                                {{
+                                  Number(item.pack)
+                                    ? new Number(item.pack).toLocaleString()
+                                    : item.pack
+                                }}
                                 <v-card-subtitle class="pa-0 overline"
                                   >Pack</v-card-subtitle
                                 >
                               </div>
                               <div class="text--primary">
-                                {{ new Number(item.unit).toLocaleString() }}
+                                {{
+                                  Number(item.unit)
+                                    ? new Number(item.unit).toLocaleString()
+                                    : item.unit
+                                }}
                                 <v-card-subtitle class="pa-0 overline"
                                   >Unit</v-card-subtitle
                                 >
@@ -504,7 +522,11 @@
 
                               <div class="text--primary">
                                 GH₵
-                                {{ new Number(item.price).toLocaleString() }}
+                                {{
+                                  Number(item.price)
+                                    ? new Number(item.price).toLocaleString()
+                                    : item.price
+                                }}
                                 <v-card-subtitle class="pa-0 overline"
                                   >Unit Price</v-card-subtitle
                                 >
@@ -512,7 +534,11 @@
 
                               <div class="text--primary">
                                 GH₵
-                                {{ new Number(item.subTotal).toLocaleString() }}
+                                {{
+                                  Number(item.subTotal)
+                                    ? new Number(item.subTotal).toLocaleString()
+                                    : item.subTotal
+                                }}
                                 <v-card-subtitle class="pa-0 overline"
                                   >subtotal</v-card-subtitle
                                 >
@@ -554,19 +580,35 @@
                                 >
                                   <td>{{ item.brand }}</td>
                                   <td>
-                                    {{ new Number(item.pack).toLocaleString() }}
-                                  </td>
-                                  <td>
-                                    {{ new Number(item.unit).toLocaleString() }}
-                                  </td>
-                                  <td>
                                     {{
-                                      new Number(item.price).toLocaleString()
+                                      Number(item.pack)
+                                        ? new Number(item.pack).toLocaleString()
+                                        : item.pack
                                     }}
                                   </td>
                                   <td>
                                     {{
-                                      new Number(item.subTotal).toLocaleString()
+                                      Number(item.unit)
+                                        ? new Number(item.unit).toLocaleString()
+                                        : item.unit
+                                    }}
+                                  </td>
+                                  <td>
+                                    {{
+                                      Number(item.price)
+                                        ? new Number(
+                                            item.price
+                                          ).toLocaleString()
+                                        : item.price
+                                    }}
+                                  </td>
+                                  <td>
+                                    {{
+                                      Number(item.subTotal)
+                                        ? new Number(
+                                            item.subTotal
+                                          ).toLocaleString()
+                                        : item.subTotal
                                     }}
                                   </td>
                                 </tr>
@@ -578,9 +620,11 @@
                                   <td class="font-weight-black">
                                     GH₵
                                     {{
-                                      Number(
-                                        salesOrder.totalSales
-                                      ).toLocaleString()
+                                      Number(salesOrder.totalSales)
+                                        ? Number(
+                                            salesOrder.totalSales
+                                          ).toLocaleString()
+                                        : salesOrder.totalSales
                                     }}
                                   </td>
                                 </tr>
@@ -725,19 +769,20 @@ export default {
       e6: 1,
       getAllBrands: [],
       selectedBrand: "",
+      boxSize: 0,
       recPriceRange: {},
       currentUnitPrice: null,
       pricesCheckedList: [],
       stockCheck: {
-        pack: "",
-        unit: "",
+        pack: 0,
+        unit: 0,
         stockCheckedList: []
       },
       salesOrder: {
-        pack: "",
-        unit: "",
-        price: "",
-        subTotal: "",
+        pack: 0,
+        unit: 0,
+        price: 0,
+        subTotal: 0,
         salesOrderList: []
       },
       summary: {},
@@ -764,7 +809,7 @@ export default {
     },
     async addNewVisit() {
       this.timeOut = new Date().getTime().toString();
-      this.duration = (Number(this.timeOut) - Number(this.timeIn)).toString();
+      this.duration = (this.timeOut - this.timeIn).toString();
       if (this.payment.cash === 0) {
         this.payment.paymentMethod = "credit";
       } else if (this.payment.credit === 0) {
@@ -779,18 +824,24 @@ export default {
             visitInput: {
               salesman: this.salesman_id,
               outlet: this.outlet_id,
-              date: this.date,
-              timeIn: this.timeIn,
-              timeOut: this.timeOut,
-              duration: this.duration,
+              date: this.date.toString(),
+              timeIn: this.timeIn.toString(),
+              timeOut: this.timeOut.toString(),
+              duration: this.duration.toString(),
               dataCollected: {
                 sellingPricePerUnitOfBrands: this.pricesCheckedList,
                 stock: this.stockCheck.stockCheckedList,
                 salesOrder: this.salesOrder.salesOrderList,
                 salesOrderSummary: {
-                  total: Number(this.salesOrder.totalSales),
-                  cash: Number(this.payment.cash),
-                  credit: Number(this.payment.credit),
+                  total: parseInt(this.salesOrder.totalSales)
+                    ? parseInt(this.salesOrder.totalSales)
+                    : this.salesOrder.totalSales,
+                  cash: parseInt(this.payment.cash)
+                    ? parseInt(this.payment.cash)
+                    : this.payment.cash,
+                  credit: parseInt(this.payment.credit)
+                    ? parseInt(this.payment.credit)
+                    : this.payment.credit,
                   paymentMethod: this.payment.paymentMethod
                 }
               }
@@ -916,7 +967,9 @@ export default {
                       { text: "", border: [false, false, false, false] },
                       { text: "Total(GHC)", bold: true, fontSize: 9 },
                       {
-                        text: Number(salesOrderSummary.total).toLocaleString(),
+                        text: Number(salesOrderSummary.total)
+                          ? Number(salesOrderSummary.total).toLocaleString()
+                          : salesOrderSummary.total,
                         fontSize: 8
                       }
                     ],
@@ -927,7 +980,9 @@ export default {
                       { text: "", border: [false, false, false, false] },
                       { text: "Cash(GHC)", fontSize: 9, bold: true },
                       {
-                        text: Number(salesOrderSummary.cash).toLocaleString(),
+                        text: Number(salesOrderSummary.cash)
+                          ? Number(salesOrderSummary.cash).toLocaleString()
+                          : salesOrderSummary.cash,
                         fontSize: 8
                       }
                     ],
@@ -937,7 +992,9 @@ export default {
                       { text: "", border: [false, false, false, false] },
                       { text: "Credit(GHC)", fontSize: 9, bold: true },
                       {
-                        text: Number(salesOrderSummary.credit).toLocaleString(),
+                        text: Number(salesOrderSummary.credit)
+                          ? Number(salesOrderSummary.credit).toLocaleString()
+                          : salesOrderSummary.credit,
                         fontSize: 8
                       }
                     ],
@@ -1079,14 +1136,23 @@ export default {
                                 date: that.date,
                                 outlet: that.outlet_id,
                                 salesman: that.salesman_id,
-                                invoiceNumber: data.getInvoiceNumber + 1,
+                                invoiceNumber: (
+                                  data.getInvoiceNumber + 1
+                                ).toString(),
                                 salesOrder: that.salesOrder.salesOrderList,
                                 salesOrderSummary: {
-                                  total: String(that.salesOrder.totalSales),
-                                  cash: String(that.payment.cash),
-                                  credit: String(that.payment.credit),
+                                  total: parseInt(that.salesOrder.totalSales)
+                                    ? parseInt(that.salesOrder.totalSales)
+                                    : that.salesOrder.totalSales,
+                                  cash: parseInt(that.payment.cash)
+                                    ? parseInt(that.payment.cash)
+                                    : that.payment.cash,
+                                  credit: parseInt(that.payment.credit)
+                                    ? parseInt(that.payment.credit)
+                                    : that.payment.credit,
                                   paymentMethod: that.payment.paymentMethod
-                                }
+                                },
+                                invoicePdfUrl: downloadURL
                               }
                             }
                           });
@@ -1114,98 +1180,75 @@ export default {
       this.snackbar = true;
     },
     addToSalesOrderList() {
+      let subTotal = 0;
       if (
-        this.selectedBrand &&
+        this.selectedBrand.name &&
         (this.salesOrder.pack || this.salesOrder.unit) &&
         this.salesOrder.price
       ) {
         if (
           this.salesOrder.salesOrderList.filter(
-            e => e.brand.name === this.selectedBrand
+            e => e.brand === this.selectedBrand.name
           ).length > 0
         ) {
           this.snackbarAlert(
-            `${this.selectedBrand} has already been added`,
+            `${this.selectedBrand.name} has already been added`,
             "error"
           );
+          return;
         } else {
-          let subTotal = 0;
-          if (Number(this.salesOrder.pack) === 0) {
-            subTotal =
-              Number(this.salesOrder.unit) * Number(this.salesOrder.price);
-          } else if (Number(this.salesOrder.unit) === 0) {
-            this.snackbarAlert(
-              "Enter the number of units in one pack!",
-              "error"
-            ); //
-            return;
-          } else {
-            subTotal =
-              Number(this.salesOrder.pack) *
-              Number(this.salesOrder.unit) *
-              Number(this.salesOrder.price);
-          }
-
-          console.log("---calcuate subtotoal---", subTotal);
-
-          this.salesOrder.salesOrderList.unshift({
-            brand: this.selectedBrand.name,
-            pack: Number(this.salesOrder.pack),
-            unit: Number(this.salesOrder.unit),
-            price: Number(this.salesOrder.price),
-            subTotal: Number(subTotal)
-          });
-
-          if (this.salesOrder.salesOrderList.length === 1) {
-            this.salesOrder.totalSales = this.salesOrder.salesOrderList[0].subTotal;
-            console.log(
-              "---single item: subtotal is total",
-              this.salesOrder.totalSales
-            );
-          } else {
-            this.salesOrder.totalSales = this.salesOrder.salesOrderList
-              .map(item => Number(item.subTotal))
-              .reduce((acc, cv) => acc + cv);
-          }
-
-          console.log(
-            "---sales order list----",
-            this.salesOrder.salesOrderList
-          );
-
-          this.selectedBrand = "";
-          this.salesOrder.pack = "";
-          this.salesOrder.unit = "";
+          subTotal =
+            (this.salesOrder.pack * this.boxSize +
+              Number(this.salesOrder.unit)) *
+            this.salesOrder.price;
         }
 
-        this.sheet.salesOrder = !this.sheet.salesOrder;
-        console.log(
-          "-----selected brand name----",
-          this.selectedBrand,
-          "----pack-----",
-          this.salesOrder.pack,
-          "----unit---",
-          this.salesOrder.unit
-        );
+        this.salesOrder.salesOrderList.unshift({
+          brand: this.selectedBrand.name,
+          pack: Number(this.salesOrder.pack),
+          unit: Number(this.salesOrder.unit),
+          price: Number(this.salesOrder.price),
+          subTotal: Number(subTotal)
+        });
+
+        if (this.salesOrder.salesOrderList.length === 1) {
+          this.salesOrder.totalSales = this.salesOrder.salesOrderList[0].subTotal;
+        } else {
+          this.salesOrder.totalSales = this.salesOrder.salesOrderList
+            .map(item => Number(item.subTotal))
+            .reduce((acc, cv) => acc + cv);
+        }
+
+        this.selectedBrand = "";
+        this.salesOrder.pack = 0;
+        this.salesOrder.unit = 0;
       } else {
-        if (!this.selectedBrand) {
+        if (!this.selectedBrand.name) {
           this.snackbarAlert("Select a brand!", "error");
+          return;
         } else if (!(this.salesOrder.pack || this.salesOrder.unit)) {
-          this.snackbarAlert("Both pack and unit cannot be empty", "error");
+          this.snackbarAlert("Both pack and unit cannot be 0", "error");
+          return;
         }
       }
+
+      this.sheet.salesOrder = !this.sheet.salesOrder;
     },
     addToStockCheckedList() {
-      if (this.selectedBrand && this.stockCheck.pack && this.stockCheck.unit) {
+      if (
+        (this.selectedBrand.name && this.stockCheck.pack) ||
+        (this.selectedBrand.name && this.stockCheck.unit)
+      ) {
         if (
           this.stockCheck.stockCheckedList.filter(
-            e => e.brand.name === this.selectedBrand
+            e => e.brand === this.selectedBrand.name
           ).length > 0
         ) {
           this.snackbarAlert(
-            `${this.selectedBrand} has already been added`,
+            `${this.selectedBrand.name} has already been added`,
             "error"
           );
+          return;
         } else {
           this.stockCheck.stockCheckedList.unshift({
             brand: this.selectedBrand.name,
@@ -1213,47 +1256,38 @@ export default {
             unit: Number(this.stockCheck.unit)
           });
 
-          console.log(
-            "---stock checked list",
-            this.stockCheck.stockCheckedList
-          );
-
           this.selectedBrand = "";
-          this.stockCheck.pack = "";
-          this.stockCheck.unit = "";
+          this.stockCheck.pack = 0;
+          this.stockCheck.unit = 0;
         }
 
         this.sheet.stockCheck = !this.sheet.stockCheck;
-        console.log(
-          "-----selected brand name----",
-          this.selectedBrand,
-          "----pack-----",
-          this.stockCheck.pack,
-          "----unit",
-          this.stockCheck.unit
-        );
       } else {
         if (!this.selectedBrand) {
           this.snackbarAlert("Select a brand!", "error");
-        } else if (!this.stockCheck.pack) {
-          this.snackbarAlert("Enter the number of packs!", "error");
-        } else if (!this.stockCheck.unit) {
-          this.snackbarAlert("Enter the number of units!", "error");
+          return;
+        } else if (!(this.stockCheck.pack && this.stockCheck.unit)) {
+          this.snackbarAlert(
+            "Enter a value for pack or unit, or both!",
+            "error"
+          );
+          return;
         }
       }
     },
     addToPricesCheckedList() {
-      if (this.selectedBrand && this.currentUnitPrice) {
+      if (this.selectedBrand.name && this.currentUnitPrice) {
         if (
           this.pricesCheckedList.filter(
-            e => e.brand.name === this.selectedBrand
+            e => e.brand === this.selectedBrand.name
           ).length > 0
         ) {
           /* this.pricesCheckedList contains the element we're looking for */
           this.snackbarAlert(
-            `${this.selectedBrand} has already been added`,
+            `${this.selectedBrand.name} has already been added`,
             "error"
           );
+          return;
         } else {
           this.pricesCheckedList.unshift({
             brand: this.selectedBrand.name,
@@ -1266,19 +1300,13 @@ export default {
         }
 
         this.sheet.priceCheck = !this.sheet.priceCheck;
-        console.log(
-          "-----selected brand name----",
-          this.selectedBrand,
-          "----currentUnitPrice-----",
-          this.currentUnitPrice,
-          "----prices checked list",
-          this.pricesCheckedList
-        );
       } else {
         if (!this.selectedBrand) {
           this.snackbarAlert("Select a brand!", "error");
+          return;
         } else if (!this.selectedBrand.currentUnitPrice) {
           this.snackbarAlert("Enter the current unit price!", "error");
+          return;
         }
       }
     },
@@ -1294,15 +1322,16 @@ export default {
           e.recommendedOutletSellingPriceRangePerUnit.end;
 
         this.salesOrder.price = e.salesmanSellingPricePerUnit;
+        this.boxSize = e.boxSize;
 
         console.log("-----select brand working-----", this.selectedBrand);
       } else {
-        this.selectedBrand = {};
+        this.selectedBrand = "";
         this.recPriceRange = {};
-        console.log("-----select brand working-----", this.selectedBrand);
+        this.boxSize = 0;
       }
     }
-  },
+  }
   // mounted() {
   //   this.$nextTick(() => {
   //     this.$nuxt.$loading.start();

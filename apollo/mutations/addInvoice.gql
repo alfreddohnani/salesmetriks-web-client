@@ -18,5 +18,6 @@ mutation($invoiceInput: InvoiceInput!) {
       cash
       credit
     }
+    invoicePdfUrl
   }
 }
