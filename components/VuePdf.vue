@@ -11,7 +11,8 @@ export default {
   name: "VuePdf",
   props: {
     previewLink: { type: String, required: true }
-  }
+  },
+  components: {}
 };
 </script>
 

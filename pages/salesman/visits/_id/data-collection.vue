@@ -1347,3 +1347,5 @@ export default {
   margin: 1rem;
 }
 </style>
+( ` Item - ${e.brand} Pack - ${e.pack} Unit - ${e.unit} Unit Price - ${e.price}
+Subtotal - ${e.subTotal} `)
