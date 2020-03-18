@@ -1,5 +1,5 @@
 {
-  "name": "Salesmetriks-client",
+  "name": "salesmetriks-client",
   "version": "1.0.0",
   "description": "Web client of the Salesmetriks app",
   "author": "Alfred Doh-Nani, Sally Musanga",
@@ -12,13 +12,19 @@
     "test": "jest"
   },
   "dependencies": {
-    "nuxt": "^2.0.0"
+    "@nuxtjs/apollo": "^4.0.0-rc19",
+    "@nuxtjs/vuetify": "^1.11.0",
+    "firebase": "^7.11.0",
+    "graphql-tag": "^2.10.3",
+    "nuxt": "^2.11.0",
+    "pdfmake": "^0.1.65",
+    "vue-pdf": "^4.0.8",
+    "vuedraggable": "^2.23.2"
   },
   "devDependencies": {
-    "@nuxtjs/vuetify": "^1.0.0",
-    "@vue/test-utils": "^1.0.0-beta.27",
-    "babel-jest": "^24.1.0",
-    "jest": "^24.1.0",
-    "vue-jest": "^4.0.0-0"
+    "@vue/test-utils": "^1.0.0-beta.32",
+    "babel-jest": "^25.1.0",
+    "jest": "^25.1.0",
+    "vue-jest": "^3.0.5"
   }
 }

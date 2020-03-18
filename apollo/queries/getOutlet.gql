@@ -1,0 +1,37 @@
+query($_id: ID!) {
+  getOutlet(_id: $_id) {
+    uniqueId
+    name
+    location
+    target {
+      salesVolume
+      visitDaysPerWeek
+      numberOfVisitsForTheMonth
+      brandSales {
+        brand {
+          name
+        }
+        salesNumber
+      }
+    }
+    actual {
+      salesVolume
+      numberOfVisitsForTheMonth
+      brandSales {
+        brand {
+          name
+        }
+        salesNumber
+      }
+    }
+    owner {
+      firstName
+      lastName
+    }
+    outletContact {
+      telephone
+    }
+    currentCredit
+    status
+  }
+}

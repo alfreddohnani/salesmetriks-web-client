@@ -23,22 +23,19 @@
 
     <v-app-bar app color="indigo" dark>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-toolbar-title>SALESMETRIKS</v-toolbar-title>
     </v-app-bar>
-
     <v-content>
-      <v-container>
-        <nuxt />
-      </v-container>
+      <nuxt />
     </v-content>
     <v-footer color="indigo" app>
-      <span class="white--text">&copy; 2019</span>
+      <span class="white--text">&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
 export default {
+  name: "SalesmanHomeLayout",
   props: {
     source: String
   },
@@ -47,3 +44,5 @@ export default {
   })
 };
 </script>
+
+<style></style>

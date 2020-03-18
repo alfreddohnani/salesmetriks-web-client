@@ -1,0 +1,11 @@
+query {
+  getAllBrands {
+    name
+    boxSize
+    salesmanSellingPricePerUnit
+    recommendedOutletSellingPriceRangePerUnit {
+      start
+      end
+    }
+  }
+}

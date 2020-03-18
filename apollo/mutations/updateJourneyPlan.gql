@@ -1,0 +1,21 @@
+mutation($journeyPlan_id: ID!, $outlets: [OutletByOrderInput!]!) {
+  updateJourneyPlan(journeyPlan_id: $journeyPlan_id, outlets: $outlets) {
+    _id
+    outlets {
+      order
+      outlet {
+        _id
+        uniqueId
+        name
+        location
+        owner {
+          firstName
+          lastName
+        }
+        outletContact {
+          telephone
+        }
+      }
+    }
+  }
+}

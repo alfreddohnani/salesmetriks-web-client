@@ -2,3 +2,9 @@
 //
 // The variables you want to modify
 // $font-size-root: 20px;
+
+$body-font-family: "Montserrat";
+$heading-font-family: "Montserrat";
+$font-size-root: 16px;
+$material-light: ("background": #f9fafb);
+@import "~vuetify/src/styles/styles.sass";

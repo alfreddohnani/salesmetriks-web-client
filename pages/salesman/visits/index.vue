@@ -1,89 +1,141 @@
 <template>
   <div>
-    <v-app-bar color="grey lighten-4" flat tile fixed style="margin-top:60px;">
-    <v-toolbar>
-      <v-btn to="/salesman/visits" icon>
-        <v-icon>mdi-arrow-left</v-icon>
-      </v-btn>
-    
-      <v-toolbar-title class="ml-12"> Visits</v-toolbar-title>
-    </v-toolbar>
-</v-app-bar>
-      <v-container class="mt-4">
-
-    <v-row>
-
-      <v-col cols="6" lg="6">
-        <v-menu
-          v-model="menu2"
-          :close-on-content-click="false"
-          transition="scale-transition"
-          offset-y
-          max-width="290px"
-          min-width="290px"
-        >
-          <template v-slot:activator="{ on }">
-            <v-text-field
-              v-model="computedDateFormatted"
-              readonly
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker v-model="date" no-title @input="menu2 = false"></v-date-picker>
-        </v-menu>
-        
-      </v-col>
+    <salesman-layout>
+      <template #pageToolbars>
+        <back-button class="mr-2" />
+        <div class="title font-weight-black">Visits</div>
         <v-spacer></v-spacer>
-        
-        <v-col cols="6" lg="6" class="mt-6">
-        <v-btn to="/salesman/visits/extra-visit"  depressed small color="green"> + Extra Visit </v-btn>
-        </v-col>
-    </v-row>
-    <Visits />
-    
-      </v-container>
+        <v-menu offset-y>
+          <template v-slot:activator="{ on }">
+            <v-btn small icon v-on="on">
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
+          </template>
+          <v-list>
+            <v-list-item>
+              <nuxt-link to="/salesman/create-outlet">Create Outlet</nuxt-link>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </template>
+
+      <template #content>
+        <v-container>
+          <v-row class="justify-center">
+            <div>
+              <v-btn outlined color="indigo" class="text-center"
+                ><span>{{ new Date(date).toDateString() }}</span></v-btn
+              >
+            </div>
+          </v-row>
+          <v-row
+            class="d-flex justify-center"
+            v-if="
+              getJourneyPlanForSalesman && getJourneyPlanForSalesman.outlets
+            "
+          >
+            <div>
+              <customer-card
+                class="ma-3"
+                v-for="journeyPlan in sortOutletsAsc"
+                :key="journeyPlan.outlet._id"
+              >
+                <template #order>
+                  <div class="d-flex justify-space-between pa-2">
+                    <div>
+                      <v-badge
+                        class="pa-2"
+                        inline
+                        color="indigo lighten-2"
+                        dark
+                        :content="journeyPlan ? journeyPlan.order : 0"
+                      >
+                        <v-icon color="indigo lighten-2">mdi-map-marker</v-icon>
+                      </v-badge>
+                    </div>
+
+                    <div>
+                      <v-btn
+                        :href="`/salesman/visits/${journeyPlan.outlet._id}`"
+                        dark
+                        rounded
+                        color="indigo"
+                        >Check in</v-btn
+                      >
+                    </div>
+                  </div>
+                </template>
+                <template #uniqueId>{{ journeyPlan.outlet.uniqueId }}</template>
+                <template #name>{{ journeyPlan.outlet.name }}</template>
+                <template #owner>
+                  {{
+                    journeyPlan.outlet.owner.firstName +
+                      " " +
+                      journeyPlan.outlet.owner.lastName
+                  }}
+                </template>
+                <template #contact>
+                  {{ journeyPlan.outlet.outletContact.telephone }}
+                </template>
+              </customer-card>
+            </div>
+          </v-row>
+
+          <v-row class="d-flex justify-center grey--text" v-else
+            >No visits availble for today</v-row
+          >
+        </v-container>
+      </template>
+    </salesman-layout>
   </div>
 </template>
+
 <script>
-import Visits from "~/components/Visits";
+import SalesmanLayout from "~/components/SalesmanLayout";
+import BackButton from "~/components/BackButton";
+import CustomerCard from "~/components/CustomerCard";
+import journeyPlanForSalesman from "~/apollo/queries/getJourneyPlanForSalesman";
+
 export default {
-  layout: "salesman",
+  name: "VisitsPage",
+  layout: "plain",
   components: {
-    Visits
+    SalesmanLayout,
+    BackButton,
+    CustomerCard
   },
-  data: vm => ({
+  data() {
+    return {
+      salesman_id: "5e6b5a5131c43200175423bd",
       date: new Date().toISOString().substr(0, 10),
-      dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
-      menu1: false,
-      menu2: false,
-    }),
+      journeyPlanForSalesman: {},
+      loading: 0
+    };
+  },
+  computed: {
+    sortOutletsAsc() {
+      return this.getJourneyPlanForSalesman &&
+        this.getJourneyPlanForSalesman.outlets
+        ? this.getJourneyPlanForSalesman.outlets.sort(
+            (a, b) => a.order - b.order
+          )
+        : [];
+    }
+  },
+  apollo: {
+    getJourneyPlanForSalesman() {
+      return {
+        query: journeyPlanForSalesman,
+        prefetch: true,
 
-    computed: {
-      computedDateFormatted () {
-        return this.formatDate(this.date)
-      },
-    },
-
-    watch: {
-      date (val) {
-        this.dateFormatted = this.formatDate(this.date)
-      },
-    },
-
-    methods: {
-      formatDate (date) {
-        if (!date) return null
-
-        const [year, month, day] = date.split('-')
-        return `${month}/${day}/${year}`
-      },
-      parseDate (date) {
-        if (!date) return null
-
-        const [month, day, year] = date.split('/')
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-      },
-    },
-  
+        variables() {
+          return {
+            salesman_id: this.salesman_id,
+            date: Date.parse(this.date).toString()
+          };
+        }
+      };
+    }
+  }
 };
 </script>
