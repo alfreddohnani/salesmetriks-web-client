@@ -1,0 +1,2 @@
+window["cmsg"]["strings"]["en"] = window["cmsg"]["strings"]["en"] || [];
+window["cmsg"]["strings"]["en"].push({"To2iTw":"Edit","n6fJwQ":"Item {0}","Ta6isA":"Paste data from spreadsheet","IcHxsg":"Bar chart","mX2Ymg":"Row chart","HliBAg":"Line chart","4SZGww":"Area chart","n9PWjA":"Pie chart","mf4yew":"Donut chart","9IkXrg":"{0, number}","d7w5Og":"Bold","mEHEFw":"Italics","R/C9Vw":"Font Size"});
