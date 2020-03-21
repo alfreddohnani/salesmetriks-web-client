@@ -20,7 +20,7 @@
             {{
               uploadProgress === "100%"
                 ? "done"
-                : "uploading invoice to the cloud"
+                : "uploading invoice to the cloud and sending sms"
             }}
           </v-chip>
         </div>
@@ -695,7 +695,9 @@
                       </div>
                     </v-card>
 
-                    <v-btn color="primary">Continue</v-btn>
+                    <v-btn @click="redirectToVisits" color="primary"
+                      >Continue</v-btn
+                    >
                     <v-btn @click="e6 = 5" icon outlined color="primary">
                       <v-icon>mdi-arrow-left</v-icon>
                     </v-btn>
@@ -801,6 +803,10 @@ export default {
     }
   },
   methods: {
+    redirectToVisits() {
+      // Pop off the current completed visit from the list of visits
+      this.router.push({ name: "salesman-visits" });
+    },
     downloadInvoice() {
       this.pdfInvoice.download();
     },

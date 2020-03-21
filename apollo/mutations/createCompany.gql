@@ -1,0 +1,9 @@
+mutation($companyInput: CompanyInput!, $salesAdminInput: SalesAdminInput!) {
+  createCompany(
+    companyInput: $companyInput
+    salesAdminInput: $salesAdminInput
+  ) {
+    name
+    email
+  }
+}

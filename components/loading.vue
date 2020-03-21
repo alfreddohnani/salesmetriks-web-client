@@ -1,15 +1,12 @@
 <template lang="html">
   <v-overlay :value="loading">
-    <!-- <div class="sk-folding-cube">
-      <div class="sk-cube1 sk-cube"></div>
-      <div class="sk-cube2 sk-cube"></div>
-      <div class="sk-cube4 sk-cube"></div>
-      <div class="sk-cube3 sk-cube"></div>
-    </div> -->
-
     <div class="loader">
-      <div class="box"></div>
-      <div class="box"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__bar"></div>
+      <div class="loader__ball"></div>
     </div>
   </v-overlay>
 </template>
@@ -39,103 +36,189 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$size: 30px;
-$yellow_light: #fed750;
-$yellow: #e6a32f;
-$yellow_dark: #c87932;
-$duration: 2s;
+// Variables
+$bar-color: linear-gradient(to right, #0083b0, #00b4db);
+$ball-color: #fff;
 
-html,
-body {
+html {
   height: 100%;
 }
 body {
+  height: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
-  background: radial-gradient(#333, #000);
-  transform: translateY(-$size * 1.5);
-}
-
-@mixin psuedo {
-  display: block;
-  content: "";
+  justify-content: center;
 }
 
 .loader {
-  display: inline-flex;
-  flex-wrap: wrap;
-  width: $size * 3;
-  height: $size * 3;
-  transform-style: preserve-3d;
-  transform: rotateX(45deg) rotate(45deg);
-}
+  position: relative;
+  width: 75px;
+  height: 100px;
 
-.box {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: $size;
-  height: $size;
-  background: $yellow_light;
-  box-shadow: $size * 3.75 $size * 3.75 20px #000;
-  animation: move $duration ease-in-out infinite both;
-  transform-style: preserve-3d;
+  &__bar {
+    position: absolute;
+    bottom: 0;
+    width: 10px;
+    height: 50%;
+    background: $bar-color;
+    transform-origin: center bottom;
+    box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.2);
 
-  @for $i from 1 through 3 {
-    &:nth-child(#{$i}) {
-      animation-delay: $i/2 * -$duration;
+    @for $i from 1 through 5 {
+      &:nth-child(#{$i}) {
+        left: ($i - 1) * 15px;
+        transform: scale(1, $i * 0.2);
+        animation: barUp#{$i} 4s infinite;
+      }
     }
   }
 
-  &:before,
-  &:after {
-    @include psuedo;
+  &__ball {
     position: absolute;
-    width: $size;
-    height: $size;
-  }
-  &:before {
-    top: 100%;
+    bottom: 10px;
     left: 0;
-    background: $yellow;
-    transform-origin: center top;
-    transform: rotateX(-90deg);
-  }
-  &:after {
-    top: 0;
-    left: 100%;
-    background: $yellow_dark;
-    transform-origin: center left;
-    transform: rotateY(90deg);
+    width: 10px;
+    height: 10px;
+    background: $ball-color;
+    border-radius: 50%;
+    animation: ball 4s infinite;
   }
 }
 
-@keyframes move {
-  0%,
-  100% {
-    transform: none;
+@keyframes ball {
+  0% {
+    transform: translate(0, 0);
   }
-  12.5% {
-    transform: translate($size, 0);
+  5% {
+    transform: translate(8px, -14px);
   }
-  25% {
-    transform: translate($size * 2, 0);
+  10% {
+    transform: translate(15px, -10px);
   }
-  37.5% {
-    transform: translate($size * 2, $size);
+  17% {
+    transform: translate(23px, -24px);
+  }
+  20% {
+    transform: translate(30px, -20px);
+  }
+  27% {
+    transform: translate(38px, -34px);
+  }
+  30% {
+    transform: translate(45px, -30px);
+  }
+  37% {
+    transform: translate(53px, -44px);
+  }
+  40% {
+    transform: translate(60px, -40px);
   }
   50% {
-    transform: translate($size * 2, $size * 2);
+    transform: translate(60px, 0);
   }
-  62.5% {
-    transform: translate($size, $size * 2);
+  57% {
+    transform: translate(53px, -14px);
   }
-  75% {
-    transform: translate(0, $size * 2);
+  60% {
+    transform: translate(45px, -10px);
   }
-  87.5% {
-    transform: translate(0, $size);
+  67% {
+    transform: translate(37px, -24px);
+  }
+  70% {
+    transform: translate(30px, -20px);
+  }
+  77% {
+    transform: translate(22px, -34px);
+  }
+  80% {
+    transform: translate(15px, -30px);
+  }
+  87% {
+    transform: translate(7px, -44px);
+  }
+  90% {
+    transform: translate(0, -40px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes barUp1 {
+  0% {
+    transform: scale(1, 0.2);
+  }
+  40% {
+    transform: scale(1, 0.2);
+  }
+  50% {
+    transform: scale(1, 1);
+  }
+  90% {
+    transform: scale(1, 1);
+  }
+  100% {
+    transform: scale(1, 0.2);
+  }
+}
+@keyframes barUp2 {
+  0% {
+    transform: scale(1, 0.4);
+  }
+  40% {
+    transform: scale(1, 0.4);
+  }
+  50% {
+    transform: scale(1, 0.8);
+  }
+  90% {
+    transform: scale(1, 0.8);
+  }
+  100% {
+    transform: scale(1, 0.4);
+  }
+}
+@keyframes barUp3 {
+  0% {
+    transform: scale(1, 0.6);
+  }
+  100% {
+    transform: scale(1, 0.6);
+  }
+}
+@keyframes barUp4 {
+  0% {
+    transform: scale(1, 0.8);
+  }
+  40% {
+    transform: scale(1, 0.8);
+  }
+  50% {
+    transform: scale(1, 0.4);
+  }
+  90% {
+    transform: scale(1, 0.4);
+  }
+  100% {
+    transform: scale(1, 0.8);
+  }
+}
+@keyframes barUp5 {
+  0% {
+    transform: scale(1, 1);
+  }
+  40% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1, 0.2);
+  }
+  90% {
+    transform: scale(1, 0.2);
+  }
+  100% {
+    transform: scale(1, 1);
   }
 }
 </style>
