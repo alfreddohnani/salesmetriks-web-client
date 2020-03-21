@@ -805,7 +805,7 @@ export default {
   methods: {
     redirectToVisits() {
       // Pop off the current completed visit from the list of visits
-      this.router.push({ name: "salesman-visits" });
+      this.$router.push({ name: "salesman-visits" });
     },
     downloadInvoice() {
       this.pdfInvoice.download();
