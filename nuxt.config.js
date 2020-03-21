@@ -59,6 +59,9 @@ export default {
   },
 
   build: {
+    transpile: [
+      "vee-validate/dist/rules"
+    ],
     extend(config, ctx) {
       config.output.globalObject = "this";
       config.module.rules.push({
