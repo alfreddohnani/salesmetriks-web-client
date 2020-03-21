@@ -242,7 +242,7 @@ extend("email", {
 
 export default {
   name: "RequestDemoPage",
-  layout: "",
+  layout: "landing-pages",
   components: {
     ValidationProvider,
     ValidationObserver
